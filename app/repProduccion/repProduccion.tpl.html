@@ -1,0 +1,16 @@
+<md-progress-linear ng-show="vm.loading" md-mode="indeterminate"></md-progress-linear>
+<p style="padding:10px">Reporte de Producción</p>
+<md-button ng-click="vm.exportar()" class="md-raised md-primary">Exportar</md-button>
+<md-content>
+    <md-list>
+        <md-list-item ng-repeat="emision in vm.emisiones | orderBy: 'numeroReferencia' : false " class="md-3-line">
+            <div class="md-list-item-text">
+                <h3>{{emision.numeroReferencia}}</h3>
+                <h4>{{emision.descripcionZona}}, {{emision.descripcionSucursal}}, {{emision.nombreEjecutivo}}, {{emision.empleado}}, {{emision.tipoMovimiento}}</h4>
+                <p>{{emision.fechaInicioVigencia}} - {{emision.fechaFinVigencia}}, {{emision.descripcionProducto}}, {{emision.clienteMifel}}: {{emision.nombreContratante}} {{emision.paternoContratante}} {{emision.maternoContratante}}, {{emision.tipoPersona}}, {{emision.rfc}}</p>
+                <p>Prima neta: {{emision.primaNeta}}, Derechos: {{emision.derechos}}, Prima total: {{emision.primaTotal}}, Paquete: {{emision.paquete}}, Plan de pago: {{emision.planPago}}</p>
+            </div>
+            <md-divider ></md-divider>
+        </md-list-item>
+    </md-list>
+</md-content> 

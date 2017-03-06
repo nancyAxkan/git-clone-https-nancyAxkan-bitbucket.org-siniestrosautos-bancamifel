@@ -1,0 +1,1192 @@
+<div class="mifel_emisionVida">
+    <form name="emisionVidaForm" id="emisionVidaForm">
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">Datos para la emisión de Vive</span>
+                    <span class="md-subhead">Datos solicitante</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="row" layout-xs="column">
+                    <md-input-container flex="20" flex-xs="100">
+                        <label>Número de cliente mifel</label>
+                        <input type="text" name="noMifelSolicitante" md-maxlength="15" ng-model="evc.emision.datosSolicitante.mifel" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9]*$/">
+                        <div class="md-accent" ng-messages="emisionVidaForm.noMifelSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input type="text" name="apPaternoSolicitante" md-maxlength="25" ng-model="evc.emision.datosSolicitante.apPat" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input type="text" name="apMaternoSolicitante" md-maxlength="25" ng-model="evc.emision.datosSolicitante.apMat" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input type="text" name="nombreSolicitante" md-maxlength="25" ng-model="evc.emision.datosSolicitante.nombre" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>R.F.C (Con homoclave)</label>
+                            <input type="text" name="rfcSolicitante" md-maxlength="13" ng-pattern="/^([A-Z&]{4})(\d{6})[A-Z0-9]{0,3}$/i" ng-keyup="evc.validaEdadRFC($event)" ng-model="evc.emision.datosSolicitante.rfc" required>
+                            <div class="hint" ng-if="evc.showHints">Verifica que la edad de COTIZACIÓN coincida con el RFC</div>
+                            <div class="md-accent" ng-messages="emisionVidaForm.rfcSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 13 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El formato de R.F.C (Con homoclave) es inválido</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <md-radio-group name="generoSolicitante" ng-model="evc.emision.datosSolicitante.genero" ng-disabled="true">
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Género</label>
+                                    <md-radio-button flex value="m">Femenino</md-radio-button>
+                                    <md-radio-button flex value="h">Masculino</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.generoSolicitante.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nacionalidad</label>
+                            <input type="text" name="nacionalidadSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.nacionalidad" required>
+                            <div class="md-accent" ng-messages="emisionVidaForm.nacionalidadSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="cargoPublicoSolicitante" ng-model="evc.cargoPublicoSolicitante" required>
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <p style="color: rgba(0,0,0,0.38);">¿El Contratante desempeña o ha desempeñado cargo alguno dentro del gobierno municipal, estatal o federal en los ultimos cuatro años?</p>
+                                </div>
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <md-radio-button value="1">Si</md-radio-button>
+                                    <md-radio-button value="0">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.cargoPublicoSolicitante.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="row" layout-xs="column" ng-show="evc.cargoPublicoSolicitante == '1'">
+                    <md-input-container flex="50" flex-xs="100">
+                        <label>Que cargo?</label>
+                        <input type="text" name="cargoSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.cargo" ng-required="evc.cargoPublicoSolicitante == '1'">
+                        <div class="md-accent" ng-messages="emisionVidaForm.cargoSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex="50" flex-xs="100">
+                        <label>Dependencia</label>
+                        <input type="text" name="dependenciaSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.Dependencia" ng-required="evc.cargoPublicoSolicitante == '1'">
+                        <div class="md-accent" ng-messages="emisionVidaForm.dependenciaSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <md-divider></md-divider>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-subhead">Domicilio particular</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <div layout="row" layout-xs="column">
+                    <md-input-container flex>
+                        <label>Calle</label>
+                        <input type="text" name="calleSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.calle" required>
+                        <div class="md-accent" ng-messages="emisionVidaForm.calleSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>No. exterior</label>
+                        <input type="text" name="noExteriorSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="20" ng-model="evc.emision.datosSolicitante.noExterior" required>
+                        <div class="md-accent" ng-messages="emisionVidaForm.noExteriorSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 20 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>No. interior</label>
+                        <input type="text" name="noInteriorSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="20" ng-model="evc.emision.datosSolicitante.noInterior">
+                        <div class="md-accent" ng-messages="emisionVidaForm.noInteriorSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 20 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Código postal</label>
+                        <input type="text" name="cpSolicitante" ng-model="evc.emision.datosSolicitante.cp" md-maxlength="5" ng-pattern="/^[0-9]{5}$/" required>
+                        <div class="md-accent" ng-messages="emisionVidaForm.cpSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 5 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-xs="column">
+                    <md-input-container flex>
+                        <label>País</label>
+                        <input type="text" name="paisSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.pais" required>
+                        <div class="md-accent" ng-messages="emisionVidaForm.paisSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Estado</label>
+                        <input type="text" name="edoSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.estado" required>
+                        <div class="md-accent" ng-messages="emisionVidaForm.edoSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Municipio o Delegación</label>
+                        <input type="text" name="munSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.municipio" required>
+                        <div class="md-accent" ng-messages="emisionVidaForm.munSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Colonia</label>
+                        <input type="text" name="colSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.colonia" required>
+                        <div class="md-accent" ng-messages="emisionVidaForm.colSolicitante.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Teléfono Particular</label>
+                            <input ng-model="evc.emision.datosSolicitante.telefonoParticular" name="telefonoParticularSolictante" md-maxlength="15" ng-pattern="/^[\-()\0-9]{8,15}$/" required/>
+                            <div class="md-accent" ng-messages="emisionVidaForm.telefonoParticularSolictante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Teléfono Oficina</label>
+                            <input ng-model="evc.emision.datosSolicitante.telefonoOficina" name="telefonoOficinaSolictante" md-maxlength="15" ng-pattern="/^[\-()\0-9]{8,15}$/" required/>
+                            <div class="md-accent" ng-messages="emisionVidaForm.telefonoOficinaSolictante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Correo electrónico</label>
+                            <input type="email" ng-model="evc.emision.datosSolicitante.email" name="emailSolictante" md-maxlength="50" ng-pattern="/^.+@.+\..+$/" required>
+                            <div class="md-accent" ng-messages="emisionVidaForm.emailSolictante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 50 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El correo electrónico proporcionado es incorrecto, por favor ingréselo en el siguiente formato: usuario/a@dominio Ej: ejemplo@bancamifel.com.mx</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="30" flex-xs="100">
+                            <label>Profesión/Ocupación</label>
+                            <input type="text" name="profesionSolictante" ng-pattern="/[a-zA-Z]$/" md-maxlength="25" ng-model="evc.emision.datosSolicitante.profesion" required>
+                            <div class="md-accent" ng-messages="emisionVidaForm.profesionSolictante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-subhead">Declaración de salud del solicitante</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="declaracioSalud" ng-model="evc.declaracionSaludSol" required>
+                                <div layout="row" layout-align="start center">
+                                    <p style="color: rgba(0,0,0,0.38);">¿El solicitante padece o ha padecido alguna enfermedad hepática, mental, pulmonar, renal, neurológica, cardiovascular, hipertensión arterial, diabetes, epilepsia, esclerosis múltiple, fiebre reumática, SIDA, cáncer,
+                                        tumores, leucemia, lupus, alcoholismo o drogadicción?*</p>
+                                </div>
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <md-radio-button value="1">Si</md-radio-button>
+                                    <md-radio-button value="0">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.declaracioSalud.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column" ng-show="evc.declaracionSaludSol == '1'">
+                        <md-input-container flex="30" flex-xs="100">
+                            <label>Padecimiento</label>
+                            <input type="text" name="padecimientoSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosSaludSolicitante.padecimiento" ng-required="evc.declaracionSaludSol == '1'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.padecimientoSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex="40" flex-xs="100">
+                            <label>Estado actual</label>
+                            <input type="text" name="edoPadecimientoSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosSaludSolicitante.estadoPadecimiento" ng-required="evc.declaracionSaludSol == '1'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.edoPadecimientoSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex="30" flex-xs="100">
+                            <label>Desde cuando</label>
+                            <md-datepicker name="fechaPadecimientoSolicitante" ng-model="evc.emision.datosSaludSolicitante.fechaPadecimiento" md-placeholder="Fecha padecimiento*" ng-required="evc.declaracionSaludSol == '1'"></md-datepicker>
+                            <div class="md-accent" ng-messages="emisionVidaForm.fechaPadecimientoSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="respuestaFumaSolicitante" ng-model="evc.emision.datosSaludSolicitante.fuma" required>
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">¿Ha fumado en los últimos 12 meses?*</label>
+                                    <md-radio-button value="si">Si</md-radio-button>
+                                    <md-radio-button value="no">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.respuestaFumaSolicitante.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-subhead">Datos del contratante</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="contrateIgual" ng-model="evc.igualSol" ng-change="evc.eliminarContratante()" required>
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">¿El Contratante es igual al Solicitante Titular?*</label>
+                                    <md-radio-button value="1">Si</md-radio-button>
+                                    <md-radio-button value="0">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.contrateIgual.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column" ng-show="evc.igualSol == '0'">
+                    <div layout="column">
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex="20" flex-xs="100">
+                                <label>Número de cliente mifel</label>
+                                <input type="text" name="noMifelContratante" md-maxlength="15" ng-model="evc.emision.datosContratante.mifel" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9]*$/">
+                                <div class="md-accent" ng-messages="emisionVidaForm.noMifelContratante.$error" role="alert">
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input type="text" name="apPaternoContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.apPat" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.apPaternoContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input type="text" name="apMaternoContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.apMat" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.apMaternoContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input type="text" name="nombreContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.nombre" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.nombreContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>R.F.C (Con homoclave)</label>
+                            <input type="text" name="rfcContratante" ng-model="evc.emision.datosContratante.rfc" md-maxlength="13" ng-pattern="/^([A-Z&]{4})(\d{6})[A-Z0-9]{0,3}$/i" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.rfcContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 13 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El formato de R.F.C (Con homoclave) es inválido</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>CURP</label>
+                            <input type="text" name="curpContratante" ng-model="evc.emision.datosContratante.curp" ng-pattern="/^([A-Z]{4})([0-9]{6})([A-Z]{6})([A-Z0-9]{2})$/i" md-maxlength="18">
+                            <div class="md-accent" ng-messages="emisionVidaForm.curpContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 18 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El formato de CURP es inválido</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <md-radio-group name="generoContratante" ng-model="evc.emision.datosContratante.genero" ng-required="evc.igualSol == '0'">
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Género</label>
+                                    <md-radio-button flex value="m">Femenino</md-radio-button>
+                                    <md-radio-button flex value="h">Masculino</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.generoContratante.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div layout="column">
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex="35" flex-xs="100">
+                                <label>Nacionalidad</label>
+                                <input type="text" name="nacionalidadContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.nacionalidad" ng-required="evc.igualSol == '0'">
+                                <div class="md-accent" ng-messages="emisionVidaForm.nacionalidadContratante.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex="35" flex-xs="100">
+                                <label>Número de Serie de Certificado Digital de la FIEL</label>
+                                <input type="text" name="fielContratante" ng-pattern="/[a-zA-Z0-9]$/" md-maxlength="25" ng-model="evc.emision.datosContratante.fiel">
+                                <div class="md-accent" ng-messages="emisionVidaForm.fielContratante.$error" role="alert">
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex="30" flex-xs="100">
+                                <label>Profesión/Ocupación</label>
+                                <input type="text" name="profesionContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.profesion" ng-required="evc.igualSol == '0'">
+                                <div class="md-accent" ng-messages="emisionVidaForm.profesionContratante.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="column">
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex>
+                                <md-radio-group name="cargoPubCont" ng-model="evc.cargoPublicoContratante" ng-required="evc.igualSol == '0'">
+                                    <div layout="row" layout-padding layout-align="start center">
+                                        <label style="padding: 20px;">¿El Contratante desempeña o ha desempeñado cargo alguno dentro del gobierno municipal, estatal o federal en los ultimos cuatro años?</label>
+                                        <md-radio-button value="1">Si</md-radio-button>
+                                        <md-radio-button value="0">No</md-radio-button>
+                                    </div>
+                                </md-radio-group>
+                                <div class="radioRequerido" ng-show="emisionVidaForm.cargoPubCont.$error.required">Campo requerido.</div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="row" layout-xs="column" ng-show="evc.cargoPublicoContratante == '1'">
+                        <md-input-container flex="50" flex-xs="100">
+                            <label>Que cargo?</label>
+                            <input type="text" name="cargoContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.cargo" ng-required="evc.cargoPublicoContratante == '1'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.cargoContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex="50" flex-xs="100">
+                            <label>Dependencia</label>
+                            <input type="text" name="dependenciaContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.Dependencia" ng-required="evc.cargoPublicoContratante == '1'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.dependenciaContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <md-divider></md-divider>
+                    <md-card-header>
+                        <md-card-header-text>
+                            <span class="md-subhead">Domicilio particular</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Calle</label>
+                            <input type="text" name="calleContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.calle" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.calleContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>No. exterior</label>
+                            <input type="text" name="noExteriorContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="15" ng-model="evc.emision.datosContratante.noExterior" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.noExteriorContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>No. interior</label>
+                            <input type="text" name="noInteriorContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="15" ng-model="evc.emision.datosContratante.noInterior">
+                            <div class="md-accent" ng-messages="emisionVidaForm.noInteriorContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Código postal</label>
+                            <input type="text" name="cpContratante" ng-model="evc.emision.datosContratante.cp" md-maxlength="5" ng-pattern="/^[0-9]{5}$/" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.cpContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 5 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>País</label>
+                            <input type="text" name="paisContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="20" ng-model="evc.emision.datosContratante.pais" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.paisContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 20 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Estado</label>
+                            <input type="text" name="edoContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.estado" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.edoContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Municipio o Delegación</label>
+                            <input type="text" name="munContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.municipio" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.munContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Colonia</label>
+                            <input type="text" name="colContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosContratante.colonia" ng-required="evc.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.colContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="column">
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex>
+                                <label>Teléfono Particular</label>
+                                <input ng-model="evc.emision.datosContratante.telefonoParticular" name="telefonoParticularContratante" md-maxlength="15" ng-pattern="/^[\-()\0-9]{8,15}$/" ng-required="evc.igualSol == '0'" />
+                                <div class="md-accent" ng-messages="emisionVidaForm.telefonoParticularContratante.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Teléfono Oficina</label>
+                                <input ng-model="evc.emision.datosContratante.telefonoOficina" name="telefonoOficinaContratante" md-maxlength="15" ng-pattern="/^[\-()\0-9]{8,15}$/" ng-required="evc.igualSol == '0'" />
+                                <div class="md-accent" ng-messages="emisionVidaForm.telefonoOficinaContratante.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Correo electrónico</label>
+                                <input type="email" ng-model="evc.emision.datosContratante.email" name="emailContratante" md-maxlength="50" ng-pattern="/^.+@.+\..+$/" ng-required="evc.igualSol == '0'">
+                                <div class="md-accent" ng-messages="emisionVidaForm.emailContratante.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 50 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">El correo electrónico proporcionado es incorrecto, por favor ingréselo en el siguiente formato: usuario/a@dominio Ej: ejemplo@bancamifel.com.mx</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-subhead">Datos del plan</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Plan</label>
+                            <input type="text" ng-model="evc.emision.datosPlan.plan" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Suma asegurada</label>
+                            <input type="text" value="{{evc.emision.datosPlan.sumaAseg | currency}}" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Forma de pago</label>
+                            <input type="text" ng-model="evc.emision.datosPlan.formaPago" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                </div>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-subhead">Coberturas adicionales</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <div layout="column">
+                    <md-input-container class="md-block">
+                        <md-checkbox ng-model="evc.emision.datosPlan.ima" aria-label="IMA" ng-disabled="true">
+                            Muerte Accidental
+                        </md-checkbox>
+                    </md-input-container>
+                    <md-input-container class="md-block" ng-show="evc.emision.datosPlan.ima">
+                        <label>Protección contratada (MXN)</label>
+                        <input type="text" value="{{evc.emision.datosPlan.sumaAseg | currency}}" ng-disabled="true" />
+                        <md-input type="text" name="proteccionConIma" ng-model="vida.proteccionConIma" ng-hide="true" />
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <md-checkbox ng-model="evc.emision.datosPlan.ise" aria-label="ISE" ng-disabled="true">
+                            Invalidez Sin Espera
+                        </md-checkbox>
+                    </md-input-container>
+                    <md-input-container class="md-block" ng-show="evc.emision.datosPlan.ise">
+                        <label>Protección contratada (MXN)</label>
+                        <input type="text" value="{{evc.emision.datosPlan.sumaAseg | currency}}" ng-disabled="true" />
+                        <md-input type="text" name="proteccionConIse" ng-model="vida.proteccionConIse" ng-hide="true" />
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <md-checkbox ng-model="evc.emision.datosPlan.diba" aria-label="DIBA" ng-disabled="true">
+                            Doble Indemnización por Muerte Accidental con Pérdidas Orgánicas
+                        </md-checkbox>
+                    </md-input-container>
+                    <md-input-container class="md-block" ng-show="evc.emision.datosPlan.diba">
+                        <label>Protección contratada (MXN)</label>
+                        <input type="text" value="{{evc.emision.datosPlan.sumaAseg | currency}}" ng-disabled="true" />
+                        <md-input type="text" name="proteccionConDiba" ng-model="vida.proteccionConDiba" ng-hide="true" />
+                    </md-input-container>
+                </div>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-subhead">Servicios incluidos</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <div layout="column">
+                    <div layout="row" layout-padding layout-xs="column" flex="60">
+                        <span style="color: #a5a5a5;">- Apoyo para últimos gastos</span>
+                    </div>
+                    <div layout="row" layout-padding layout-xs="column" flex="60">
+                        <span style="color: #a5a5a5;">- Asistencia funeraria familiar</span>
+                    </div>
+                    <div layout="row" layout-padding layout-xs="column" flex="60">
+                        <span style="color: #a5a5a5;">- Seguridad en Vida</span>
+                    </div>
+                </div>
+                <div layout="column" flex="100">
+                    <div layout="row" layout-xs="column">
+                        <div class="header_cotiza" flex ng-show="evc.actualizo === false">
+                            <div class="prima">
+                                <span>Prima Total</span>
+                                <div>
+                                    <span class="precio">{{evc.tarifaActualizada.primaTotal | currency}}</span>
+                                    <span>MXN</span>
+                                </div>
+                                <span>{{evc.tarifaActualizada.periodos}} pago(s) de {{evc.tarifaActualizada.primaTotal/evc.tarifaActualizada.periodos | currency}}</span>
+                            </div>
+                            <div class="plan" ng-show="evc.tarifaActualizada.periodos > 1">
+                                <span>Pagando de forma Anual tu </span>
+                                <span ng-class="evc.glow && evc.tarifaActualizada.periodos > 1 ? 'ahorro glow' : 'ahorro'">ahorro</span>
+                                <span>sería de: {{evc.tarifaActualizada.ahorro | currency}}</span>
+                            </div>
+                            <div class="plan" ng-show="evc.tarifaActualizada.periodos == 1"></div>
+                        </div>
+                        <div class="header_cotiza" flex ng-show="evc.actualizo === true">
+                            <div>
+                                <span class="precio">Ocurrió un error al tarificar, consultar al administrador.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Beneficiarios</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-card-actions>
+                            <md-button ng-click="evc.validaAgregaBeneficiario($event)" aria-label="Agregar beneficiario">
+                                <ng-md-icon icon="add_box" style="fill: #43C2BE" size="35"></ng-md-icon>
+                            </md-button>
+                            <span class="md-subhead">Agregar beneficiario</span>
+                        </md-card-actions>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-padding ng-show="evc.emision.datosBeneficiarios.length === 0">
+                        <div style="color: rgb(6,204,153);font-size: 13px;vertical-align: top;">Debe de existir al menos un beneficiario y tener el 100% de participación de la suma asegurada *</div>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-padding ng-show="evc.inicialBeneficarios !== 0">
+                        <div style="color: rgb(6,204,153);font-size: 13px;vertical-align: top;">El porcentaje de participación de la suma asegurada de los beneficarios debe sumar el 100% *</div>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-padding ng-show="evc.emision.datosBeneficiarios.length === 10">
+                        <div style="color: rgb(6,204,153);font-size: 13px;vertical-align: top;">Solo se puede tener un máximo de 10 beneficiarios *</div>
+                    </div>
+                    <div ng-show="evc.secAgrBen" layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input type="text" name="apPaternoBeneficiario" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.datosBeneficiarios.apPat" ng-required="evc.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionVidaForm.apPaternoBeneficiario.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input type="text" name="apMaternoBeneficiario" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.datosBeneficiarios.apMat" ng-required="evc.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionVidaForm.apMaternoBeneficiario.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input type="text" name="nombreBeneficiario" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.datosBeneficiarios.nombre" ng-required="evc.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionVidaForm.nombreBeneficiario.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Parentesco</label>
+                            <md-select name="parentescoBeneficiario" ng-model="evc.datosBeneficiarios.parentesco" ng-required="evc.secAgrBen">
+                                <md-option value="Abuelo">Abuelo(a)</md-option>
+                                <md-option value="Padre">Padre</md-option>
+                                <md-option value="Madre">Madre</md-option>
+                                <md-option value="Concubino(a)">Concubino(a)</md-option>
+                                <md-option value="Cónyuge">Cónyuge</md-option>
+                                <md-option value="Hermano(a)">Hermano(a)</md-option>
+                                <md-option value="Hijo(a)">Hijo(a)</md-option>
+                                <md-option value="Nieto(a)">Nieto(a)</md-option>
+                                <md-option value="Primo(a)">Primo(a)</md-option>
+                                <md-option value="Tio(a)">Tio(a)</md-option>
+                                <md-option value="Familiar">Familiar</md-option>
+                                <md-option value="Otro">Otro</md-option>
+                            </md-select>
+                            <div class="md-accent" ng-messages="emisionVidaForm.parentescoBeneficiario.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Participación(%) de la<br> suma asegurada</label>
+                            <input type="number" name="porcentajeBeneficiario" min="{{evc.minimoBeneficiarios}}" max="{{evc.inicialBeneficarios}}" ng-pattern="/^[0-9]+$/" ng-model="evc.datosBeneficiarios.porcentaje" ng-required="evc.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionVidaForm.porcentajeBeneficiario.$error" role="alert">
+                                <div class="md-accent" ng-message="min">Valor incorrecto</div>
+                                <div class="md-accent" ng-message="max">Valor incorrecto</div>
+                                <div class="md-accent" ng-message="pattern">Solo números enteros son válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex="30" flex-xs="100">
+                            <md-datepicker name="fechaNacBeneficiario" ng-model="evc.datosBeneficiarios.fechaNacimiento" md-placeholder="Fecha Nacimiento" ng-required="evc.secAgrBen"></md-datepicker>
+                        </md-input-container>
+                    </div>
+                    <div ng-show="evc.secAgrBen" layout="row" layout-align="end center" layout-xs="column">
+                        <md-button flex-xs ng-click="evc.cierraBeneficiario()" class="md-raised md-primary" aria-label="Cancelar agregar beneficiario">
+                            Cancelar
+                        </md-button>
+                        <md-button flex-xs ng-click="evc.agregaBeneficiario()" class="md-raised md-primary" aria-label="Agregar beneficiario" ng-disabled=" emisionVidaForm.apPaternoBeneficiario.$invalid || emisionVidaForm.apMaternoBeneficiario.$invalid || emisionVidaForm.nombreBeneficiario.$invalid || emisionVidaForm.parentescoBeneficiario.$invalid || emisionVidaForm.porcentajeBeneficiario.$invalid || emisionVidaForm.fechaNacBeneficiario.$invalid">
+                            Agregar beneficiario
+                        </md-button>
+                    </div>
+                    <div flex>
+                        <md-card ng-repeat="beneficiario in evc.emision.datosBeneficiarios">
+                            <md-card-header>
+                                <md-card-header-text>
+                                    <span class="md-subhead">Beneficiario {{$index + 1}}</span>
+                                </md-card-header-text>
+                            </md-card-header>
+                                <md-card-title-text layout="column">
+                                        <div>
+                                            <md-button ng-click="evc.borrarBeneficiario(beneficiario)" aria-label="Borrar beneficiario">
+                                                <ng-md-icon icon="delete" style="fill:#ec0a0a" size="15"></ng-md-icon>
+                                            </md-button>
+                                            <md-input-container flex="15" flex-xs="100">
+                                                <label>Primer apellido</label>
+                                                <input ng-disabled="true" ng-model="beneficiario.apPat">
+                                            </md-input-container>
+                                            <md-input-container flex="15" flex-xs="100">
+                                                <label>Segundo apellido</label>
+                                                <input ng-disabled="true" ng-model="beneficiario.apMat">
+                                            </md-input-container>
+                                            <md-input-container flex="15" flex-xs="100">
+                                                <label>Nombre(s)</label>
+                                                <input ng-disabled="true" ng-model="beneficiario.nombre">
+                                            </md-input-container>
+                                            <md-input-container flex="10" flex-xs="100">
+                                                <label>Parentesco</label>
+                                                <input ng-disabled="true" ng-model="beneficiario.parentesco">
+                                            </md-input-container>
+                                            <md-input-container flex="10" flex-xs="100">
+                                                <label>Fecha nacimiento</label>
+                                                <input ng-disabled="true" ng-model="beneficiario.fechaNacimiento">
+                                            </md-input-container>
+                                            <md-input-container flex="15" flex-xs="100">
+                                                <label>Participación(%) de la<br> suma asegurada</label>
+                                                <input ng-disabled="true" ng-model="beneficiario.porcentaje">
+                                            </md-input-container>
+                                            <md-button flex="10" ng-click="evc.validaAgregaBeneficiarioContingente(beneficiario, $event)" aria-label="Agregar contingente">
+                                                <ng-md-icon icon="add_box" style="fill: #43C2BE" size="15"></ng-md-icon>
+                                                <span style="color: #004681; text-transform: capitalize;">Contingente</span>
+                                            </md-button>
+                                        </div>
+                                        <div ng-show="beneficiario.contingentes.length !== 0" layout="row" layout-xs="column">
+                                            <md-card-header>
+                                                <md-card-header-text>
+                                                    <span class="md-subhead">Contingentes</span>
+                                                </md-card-header-text>
+                                            </md-card-header>
+                                        </div>
+                                    <div ng-repeat="contingente in beneficiario.contingentes" layout="row" layout-xs="column">
+                                         <md-card-actions>
+                                            <md-button ng-click="evc.borraBeneficiarioContigente(beneficiario, contingente)" aria-label="Borrar beneficiario">
+                                                <ng-md-icon icon="delete" style="fill:#ec0a0a" size="15"></ng-md-icon>
+                                            </md-button>
+                                        </md-card-actions>
+                                         <md-input-container flex>
+                                            <label>Primer apellido</label>
+                                            <input ng-disabled="true" ng-model="contingente.apPat">
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label>Segundo apellido</label>
+                                            <input ng-disabled="true" ng-model="contingente.apMat">
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label>Nombre(s)</label>
+                                            <input ng-disabled="true" ng-model="contingente.nombre">
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label>Parentesco</label>
+                                            <input ng-disabled="true" ng-model="contingente.parentesco">
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label>Participación(%) de la<br> suma asegurada</label>
+                                            <input ng-disabled="true" ng-model="contingente.porcentaje">
+                                        </md-input-container>
+                                    </div>
+                                </md-card-title-text>
+                        </md-card>
+                    </div> 
+                    <div ng-show="evc.secAgrBenContingente" layout="row" layout-xs="column">
+                        <span class="md-subhead">Captura contingente</span>
+                    </div>
+                    <div ng-show="evc.secAgrBenContingente" layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input type="text" id="apPaternoBeneficiarioContin" name="apPaternoBeneficiarioContin" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.datosBeneficiarios.apPat" ng-required="evc.secAgrBenContingente">
+                            <div class="md-accent" ng-messages="emisionVidaForm.apPaternoBeneficiarioContin.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input type="text" name="apMaternoBeneficiarioContin" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.datosBeneficiarios.apMat" ng-required="evc.secAgrBenContingente">
+                            <div class="md-accent" ng-messages="emisionVidaForm.apMaternoBeneficiarioContin.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input type="text" name="nombreBeneficiarioContin" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="evc.datosBeneficiarios.nombre" ng-required="evc.secAgrBenContingente">
+                            <div class="md-accent" ng-messages="emisionVidaForm.nombreBeneficiarioContin.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Parentesco</label>
+                            <md-select name="parentescoBeneficiarioContin" ng-model="evc.datosBeneficiarios.parentesco" ng-required="evc.secAgrBenContingente">
+                                <md-option value="Abuelo">Abuelo(a)</md-option>
+                                <md-option value="Padre">Padre</md-option>
+                                <md-option value="Madre">Madre</md-option>
+                                <md-option value="Concubino(a)">Concubino(a)</md-option>
+                                <md-option value="Cónyuge">Cónyuge</md-option>
+                                <md-option value="Hermano(a)">Hermano(a)</md-option>
+                                <md-option value="Hijo(a)">Hijo(a)</md-option>
+                                <md-option value="Nieto(a)">Nieto(a)</md-option>
+                                <md-option value="Primo(a)">Primo(a)</md-option>
+                                <md-option value="Tio(a)">Tio(a)</md-option>
+                                <md-option value="Familiar">Familiar</md-option>
+                                <md-option value="Otro">Otro</md-option>
+                            </md-select>
+                            <div class="md-accent" ng-messages="emisionVidaForm.parentescoBeneficiarioContin.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Participación(%) de la<br> suma asegurada</label>
+                            <input type="number" name="porcentajeBeneficiarioContin" ng-pattern="/^[0-9]+$/" ng-model="evc.datosBeneficiarios.porcentaje" min="{{evc.minimoContingente}}" max="{{evc.maximoContingente}}" ng-required="evc.secAgrBenContingente">
+                            <div class="md-accent" ng-messages="emisionVidaForm.porcentajeBeneficiarioContin.$error" role="alert">
+                                <div class="md-accent" ng-message="min">Valor incorrecto</div>
+                                <div class="md-accent" ng-message="max">Valor incorrecto</div>
+                                <div class="md-accent" ng-message="pattern">Solo números enteros son válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div ng-show="evc.secAgrBenContingente" layout="row" layout-align="end center" layout-xs="column">
+                        <md-button flex-xs ng-click="evc.cierraBeneficiario()" class="md-raised md-primary" aria-label="Cancelar agregar beneficiario">
+                            Cancelar
+                        </md-button>
+                        <md-button flex-xs ng-click="evc.agregaBeneficiarioContingente()" class="md-raised md-primary" aria-label="Agregar beneficiario" ng-disabled="emisionVidaForm.apPaternoBeneficiarioContin.$invalid || emisionVidaForm.apMaternoBeneficiarioContin.$invalid || emisionVidaForm.nombreBeneficiarioContin.$invalid || emisionVidaForm.parentescoBeneficiarioContin.$invalid || emisionVidaForm.porcentajeBeneficiarioContin.$invalid">
+                            Agregar beneficiario
+                        </md-button>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Datos de cobranza</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="viaPago" ng-model="evc.emision.datosCobranza.viaPago" ng-change="evc.cambiaViaPago()" required>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Periodicidad del pago</label>
+                                    <md-radio-button flex value="credito">Cargo a tarjeta de crédito</md-radio-button>
+                                    <md-radio-button flex value="debito">Cargo a tarjeta de débito</md-radio-button>
+                                    <md-radio-button flex value="clabe">CLABE</md-radio-button>
+                                    <md-radio-button flex value="pagoRef">Pago referenciado</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.viaPago.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <md-card-header ng-show="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                        <md-card-header-text>
+                            <span class="md-subhead">Cargo a tarjeta de crédito o débito</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <div layout="row" layout-xs="column" ng-show="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                        <md-input-container flex>
+                            <label>Banco</label>
+                            <input name="bancoObligatoria" md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="evc.emision.datosCobranza.tarjetaObligatoria.banco" ng-required="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.bancoObligatoria.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Número de tarjeta</label>
+                            <input type="password" name="tarjetaNumObligatoria" md-maxlength="16" ng-pattern="/^(\d{16})$/i" ng-model="evc.emision.datosCobranza.tarjetaObligatoria.numero" ng-required="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.tarjetaNumObligatoria.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 16 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Mes de expiración</label>
+                            <input type="number" min="1" max="12" name="mesObli" ng-model="evc.emision.datosCobranza.tarjetaObligatoria.mesExpiracion" ng-required="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.mesObli.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Año de expiración</label>
+                            <input type="number" min="{{evc.agnoValidoTarjeta.getFullYear()}}" max="{{evc.agnoValidoTarjeta.getFullYear() + 6}}" name="agnoExpiracionObli" ng-model="evc.emision.datosCobranza.tarjetaObligatoria.agnoExpiracion" ng-required="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.agnoExpiracionObli.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <md-divider ng-show="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'"></md-divider>
+                    <md-card-header ng-show="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                        <md-card-header-text>
+                            <span class="md-subhead">Cargo a tarjeta de crédito o débito (Opcional)</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <div layout="row" layout-xs="column" ng-show="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito'">
+                        <md-input-container flex>
+                            <label>Banco</label>
+                            <input name="bancoOpcional" md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="evc.emision.datosCobranza.tarjetaOpcional.banco">
+                            <div class="md-accent" ng-messages="emisionVidaForm.bancoOpcional.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Número de tarjeta</label>
+                            <input type="password" name="tarjetaNumOpcional" md-maxlength="16" ng-pattern="/^(\d{16})$/i" ng-model="evc.emision.datosCobranza.tarjetaOpcional.numero">
+                            <div class="md-accent" ng-messages="emisionVidaForm.tarjetaNumOpcional.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 16 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Mes de expiración</label>
+                            <input type="number" min="1" max="12" name="mesOpc" ng-model="evc.emision.datosCobranza.tarjetaOpcional.mesExpiracion">
+                            <div class="md-accent" ng-messages="emisionVidaForm.mesOpc.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Año de expiración</label>
+                            <input type="number" min="{{evc.agnoValidoTarjeta.getFullYear()}}" max="{{evc.agnoValidoTarjeta.getFullYear() + 6}}" name="agnoExpiracionOpc" ng-model="evc.emision.datosCobranza.tarjetaOpcional.agnoExpiracion">
+                            <div class="md-accent" ng-messages="emisionVidaForm.agnoExpiracionOpc.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <md-card-header ng-show="evc.emision.datosCobranza.viaPago == 'clabe'">
+                        <md-card-header-text>
+                            <span class="md-subhead">Datos de cuenta CLABE</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <div layout="row" layout-xs="column" ng-show="evc.emision.datosCobranza.viaPago == 'clabe'">
+                        <md-input-container flex>
+                            <label>Banco</label>
+                            <input name="bancoClabe" md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="evc.emision.datosCobranza.datosClabe.banco" ng-required="evc.emision.datosCobranza.viaPago == 'clabe'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.bancoClabe.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Número CLABE</label>
+                            <input type="text" name="numeroClabe" md-maxlength="18" ng-pattern="/^(\d{18})$/i" ng-model="evc.emision.datosCobranza.datosClabe.numeroClabe" ng-required="evc.emision.datosCobranza.viaPago == 'clabe'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.numeroClabe.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 18 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column" ng-show="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito' || evc.emision.datosCobranza.viaPago == 'clabe'">
+                        <md-input-container flex>
+                            <md-radio-group name="titular" ng-model="evc.emision.datosCobranza.titular" ng-change="evc.opcionContratantePago()" ng-required="evc.emision.datosCobranza.viaPago == 'credito' || evc.emision.datosCobranza.viaPago == 'debito' || evc.emision.datosCobranza.viaPago == 'clabe'">
+                                <div layout="row" layout-align="start center">
+                                    <p style="color: rgba(0,0,0,0.38);">¿El contratante es igual al titular de la cuenta o tarjeta?</p>
+                                </div>
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <md-radio-button value="si">Si</md-radio-button>
+                                    <md-radio-button value="no">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.titular.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column" ng-show="evc.emision.datosCobranza.titular == 'no'">
+                        <md-input-container flex="30" flex-xs="100">
+                            <label>Nombre titular</label>
+                            <input type="text" name="nombreTitular" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" ng-model="evc.emision.datosCobranza.nombreTitular" ng-required="evc.emision.datosCobranza.titular == 'no'">
+                            <div class="md-accent" ng-messages="emisionVidaForm.nombreTitular.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Parentesco</label>
+                            <md-select name="parentescoTitular" ng-model="evc.emision.datosCobranza.parentescoTitular" ng-required="evc.emision.datosCobranza.titular == 'no'">
+                                <md-option value="Abuelo">Abuelo(a)</md-option>
+                                <md-option value="Padre">Padre</md-option>
+                                <md-option value="Madre">Madre</md-option>
+                                <md-option value="Concubino(a)">Concubino(a)</md-option>
+                                <md-option value="Cónyuge">Cónyuge</md-option>
+                                <md-option value="Hermano(a)">Hermano(a)</md-option>
+                                <md-option value="Hijo(a)">Hijo(a)</md-option>
+                                <md-option value="Nieto(a)">Nieto(a)</md-option>
+                                <md-option value="Primo(a)">Primo(a)</md-option>
+                                <md-option value="Tio(a)">Tio(a)</md-option>
+                                <md-option value="Familiar">Familiar</md-option>
+                                <md-option value="Otro">Otro</md-option>
+                            </md-select>
+                            <div class="md-accent" ng-messages="emisionVidaForm.parentescoTitular.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-card-title-text>
+                            <p class="md-subhead">Solicito y autorizo a la institución financiera o bancaria que corresponda para que realice, a mi nombre el pago por los conceptos, periodicidad y montos que se detallan, con cargo a mi tarjeta de débito y crédito, o a mi cuenta
+                                bancaria identificada por la CLABE que se cita, a favor de Grupo Nacional Provincial, S.A.B. (GNP), liberando al banco de cualquier responsabilidad.</p>
+                        </md-card-title-text>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Consentimiento</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-card-title-text>
+                            <p class="md-subhead">Tuve a la vista el Aviso de Privacidad Integral de Grupo Nacional Provincial S.A.B. (GNP), el cual contiene y detalla las finalidades del tratamiento de mis datos personales, patrimoniales y sensibles. Asimismo, se me informó
+                                la disponibilidad de dicho aviso y sus actualizaciones en la página gnp.com.mx. Por lo anterior:</p>
+                        </md-card-title-text>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group ng-model="evc.emision.datosConsentimiento.solicitanteTitular" name="consentimientoSolicitanteTitular" required>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Solicitante Titular (Y de su Representante Legal si es menor de edad)</label>
+                                    <md-radio-button flex value="si">Si consiento dicho tratamiento</md-radio-button>
+                                    <md-radio-button flex value="no">No consiento dicho tratamiento</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.consentimientoSolicitanteTitular.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group ng-model="evc.emision.datosConsentimiento.contratante" name="consentimientoContratante" ng-required="evc.igualSol == 0">
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Contratante(Sólo si es diferente al solicitante)</label>
+                                    <md-radio-button flex value="si">Si consiento dicho tratamiento</md-radio-button>
+                                    <md-radio-button flex value="no">No consiento dicho tratamiento</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.consentimientoContratante.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Importante</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <md-card-title-text>
+                        <p class="md-subhead">¿Tiene o ha tenido nexos o vínculos con la delincuencia organizada; o ha sido sujeto a procedimiento legal o investigación por los delitos establecidos en el Código Penal Federal relativos a la delincuencia organizada, en territorio
+                            nacional o extranjero, por alguna autoridad de México o por alguna autoridad extranjera cuyo gobierno tenga celebrado con México tratado internacional; o ha estado su nombre, alias o apodo, sus actividades, los bienes asegurar
+                            o su nacionalidad, publicados en una lista oficial, nacional o extranjera, relativa a los delitos vinculados con los artículos anteriormente citados?</p>
+                    </md-card-title-text>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group ng-model="evc.emision.datosNexos.solicitante" name="solicitanteNexos" required>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <p style="color: rgba(0,0,0,0.38);">Solicitante titular</p>
+                                </div>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <md-radio-button flex value="si">Si</md-radio-button>
+                                    <md-radio-button flex value="no">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.solicitanteNexos.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <md-radio-group ng-model="evc.emision.datosNexos.contratante" name="contratanteNexos" ng-required="evc.igualSol == 0">
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <p style="color: rgba(0,0,0,0.38);">Contratante</p>
+                                </div>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <md-radio-button flex value="si">Si</md-radio-button>
+                                    <md-radio-button flex value="no">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionVidaForm.contratanteNexos.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <div layout="column">
+            <md-progress-linear ng-show="evc.loadingEmision" md-mode="indeterminate"></md-progress-linear>
+            <div layout="row" layout-align="end center" layout-xs="column">
+                <md-button flex-xs="100" class="md-raised md-primary" ng-click="evc.cancelarCotizacion()" aria-label="Cancelar">
+                    Cancelar cotización
+                </md-button>
+                <md-button type="submit" flex-xs="100" ng-click="evc.popEnvioPoliza()" class="md-raised md-primary" aria-label="Emitir" ng-disabled="!evc.online || emisionVidaForm.$invalid || evc.emision.datosBeneficiarios.length === 0 || evc.inicialBeneficarios !== 0 || evc.errorValidaRfc">
+                    Emitir
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>

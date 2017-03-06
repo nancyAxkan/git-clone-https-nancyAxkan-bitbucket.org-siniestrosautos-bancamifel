@@ -1,0 +1,205 @@
+<div class="mifel_vida">
+    <div layout="column" layout-align="center center">
+        <div flex>
+            <h1>Vive</h1>
+        </div>
+        <span class="divisor"></span>
+        <div flex>
+            <h3>Protección a corto plazo que te permitirá respaldar a tu familia en caso de faltar.</h3>
+        </div>
+    </div>
+    <md-content class="md-padding">
+        <md-tabs md-selected="1" md-dynamic-height md-border-bottom md-stretch-tabs>
+            <md-tab label="Más Detalles">
+                <md-content>
+                    <div layout="row" layout-xs="column" layout-align="start center" layout-padding class="apoyos">
+                        <div flex="50" hide-xs></div>
+                        <div flex="50" flex-xs="100" flex-sm="100">
+                            <iframe class="iframe" src="https://107.178.223.113/index.php/mifel-vida"></iframe>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Cotizador">
+                <md-content>
+                    <div layout="row" layout-xs="column" layout-align="center start">
+                        <div flex>
+                            <p class="titulo_azul">Tu paquete incluye los siguientes servicios:</p>
+                            <div layout="column" layout-padding>
+                                <div>
+                                    <md-icon md-svg-src="/assets/icono_check.svg" aria-label="ANTICIPO INMEDIATO"></md-icon>
+                                    ANTICIPO INMEDIATO AL FALLECIMIENTO
+                                </div>
+                                <div>
+                                    <md-icon md-svg-src="/assets/icono_check.svg" aria-label="ASISTENCIA FUNERARIA"></md-icon>
+                                    ASISTENCIA FUNERARIA FAMILIAR
+                                </div>
+                                <div>
+                                    <md-icon md-svg-src="/assets/icono_check.svg" aria-label="SEGURIDAD EN VIDA"></md-icon>
+                                    ANTICIPO POR ENFERMEDAD EN FASE TERMINAL
+                                </div>
+                            </div>
+                        </div>
+                        <div flex>
+                            <div class="header_cotiza">
+                                <div class="titulo">Vive</div>
+                                <div class="prima" ng-show="vida.muestraPrima">
+                                    <span>Prima Total</span>
+                                    <div>
+                                        <span class="precio">{{vida.primaTotal | currency}}</span>
+                                        <span>MXN</span>
+                                    </div>
+                                    <span>{{vida.periodosPrima}} Pago(s) de {{vida.pagoFraccionado | currency}}</span><br>
+                                </div>
+                                <div class="plan">
+                                     <span ng-show="!vida.muestraAhorro">A 1 AÑO</span>
+                                     <span ng-show="vida.muestraAhorro">Pagando de forma Anual tu </span><span ng-class="vida.glow ? 'ahorro glow' : 'ahorro'" ng-show="vida.muestraAhorro">ahorro</span> <span ng-show="vida.muestraAhorro">sería de: {{vida.porcFraccionado | currency}}</span>
+                                </div>
+                            </div>
+                            <form name="vidaForm" id="vidaForm">
+                                <span>Datos del solicitante titular</span>
+                                <md-content layout-padding>
+                                    <md-input-container>
+                                        <label>Apellido paterno</label>
+                                        <input type="text" required md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" name="apePaterno" ng-model="vida.apePaterno">
+                                        <div ng-messages="vidaForm.apePaterno.$error" ng-if="vidaForm.$submitted || vidaForm.apePaterno.$touched">
+                                            <div ng-message="required">Campo requerido</div>
+                                            <div ng-message="md-maxlength">Campo de 25 caracteres</div>
+                                            <div ng-message="pattern">Captura carácteres válidos</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Apellido materno</label>
+                                        <input type="text" required md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" name="apeMaterno" ng-model="vida.apeMaterno">
+                                        <div class="md-accent" ng-messages="vidaForm.apeMaterno.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido</div>
+                                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 caracteres</div>
+                                            <div class="md-accent" ng-message="pattern">Captura carácteres validos</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Nombre</label>
+                                        <input type="text" required md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" name="nombre" ng-model="vida.nombre">
+                                        <div class="md-accent" ng-messages="vidaForm.nombre.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido</div>
+                                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 caracteres</div>
+                                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Edad (Años)</label>
+                                        <input type="number" min="18" max="75"  ng-pattern="/[0-9]{2}$/" required name="edad" ng-model="vida.edad">
+                                        <div class="md-accent" ng-messages="vidaForm.edad.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido</div>
+                                            <div class="md-accent" ng-message="min">Debe ser mayor de 18 años</div>
+                                            <div class="md-accent" ng-message="max">Debe ser menor de 75 años</div>
+                                            <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <md-radio-group required name="sexo" ng-model="vida.sexo">
+                                            <div layout="row" layout-padding layout-align="start center">
+                                                <label>Género *</label>
+                                                <md-radio-button flex value="m">Femenino</md-radio-button>
+                                                <md-radio-button flex value="h">Masculino</md-radio-button>
+                                            </div>
+                                        </md-radio-group>
+                                        <div class="radioRequerido" ng-show="vidaForm.sexo.$error.required">Campo requerido.</div>
+                                    </md-input-container>
+                                </md-content>
+                                <span>Datos del plan</span>
+                                <md-content layout-padding>
+                                    <md-input-container class="md-block">
+                                        <label>Forma de pago</label>
+                                        <md-select required="true" name="formaPago" ng-model="vida.formaPago">
+                                            <md-option value="default">Seleccione</md-option>
+                                            <md-option ng-repeat="fp in vida.formasPagoCat" ng-selected="{{ fp.default === 1 ? 'true' : 'false' }}" value="{{fp.$id}}">{{fp.texto}}</md-option>
+                                        </md-select>
+                                        <div class="md-accent" ng-messages="vidaForm.formaPago.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <label>Fallecimiento Protección contratada (MXN)</label>
+                                        <md-select required="true" name="proteccionCon" ng-model="vida.proteccionCon" ng-change="vida.activaAdicionales($event)">
+                                            <md-option value="default">Seleccione</md-option>
+                                            <md-option ng-repeat="sa in vida.productos  | filter: vida.filtroProductos | orderBy: vida.numeroSuma" ng-selected="{{ sa.default === 1 ? 'true' : 'false' }}" value="{{sa.$id}}">{{sa.suma_asegurada | currency}}</md-option>
+                                        </md-select>
+                                        <div class="md-accent" ng-messages="vidaForm.proteccionCon.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                        </div>
+                                    </md-input-container>
+                                </md-content>
+                                <span>Coberturas adicionales</span>
+                                <md-content layout-padding>
+                                    <md-input-container class="md-block">
+                                        <md-checkbox ng-model="vida.ima" aria-label="IMA" ng-disabled="!vida.banIma || !vida.edad || vida.edad == ''" ng-change="vida.obtieneSuma($event)">
+                                            Muerte Accidental
+                                        </md-checkbox>
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <label>Protección contratada (MXN)</label>
+                                        <input type="text" value="{{vida.proteccionConIma | currency}}" ng-disabled="true">
+                                        <md-input type="text" name="proteccionConIma" ng-model="vida.proteccionConIma" ng-hide="true">
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <md-checkbox ng-model="vida.ise" aria-label="ISE" ng-disabled="!vida.banIse || !vida.edad || vida.edad == ''" ng-change="vida.obtieneSuma($event)">
+                                            Invalidez Sin Espera
+                                        </md-checkbox>
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <label>Protección contratada (MXN)</label>
+                                        <input type="text" value="{{vida.proteccionConIse | currency}}" ng-disabled="true">
+                                        <md-input type="text" name="proteccionConIse" ng-model="vida.proteccionConIse" ng-hide="true">
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <md-checkbox ng-model="vida.diba" aria-label="DIBA" ng-disabled="!vida.banDiba || !vida.edad || vida.edad == ''" ng-change="vida.obtieneSuma($event)">
+                                            Doble Indemnización por Muerte Accidental y Pérdida de Miembros
+                                        </md-checkbox>
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <label>Protección contratada (MXN)</label>
+                                        <input type="text" value="{{vida.proteccionConDiba | currency}}" ng-disabled="true">
+                                        <md-input type="text" name="proteccionConDiba" ng-model="vida.proteccionConDiba" ng-hide="true">
+                                    </md-input-container>
+                                </md-content>
+                                <!--span>Declaracion de Salud del Solicitante</span>
+                                <md-content layout-padding>
+                                        <sub>¿El solicitante padece o ha padecido alguna enfermdad hepática, mental, pulmonar, renal, neurológica, 
+                                        cardiovascular, hipertensión arterial, diabetes, epilepsia, escelrosis multiple, fiebre reumatica, SIDA, cancer, 
+                                        tumores, leucemia, lupus, alcoholismo o drogadicción?</sub>
+                                    <md-input-container class="md-block">
+                                        <md-radio-group required="true" name="preguntaSalud" class="md-accent" ng-model="vida.preguntaSalud">
+                                            <div layout="row" layout-padding layout-align="start center">
+                                                <md-radio-button flex value="Si">Si</md-radio-button>    
+                                                <md-radio-button flex value="No">No</md-radio-button>
+                                            </div>
+                                        </md-radio-group>
+                                        <div class="md-accent" ng-messages="vidaForm.preguntaSalud.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                        </div>
+                                    </md-input-container-->
+                                <div layout="row" layout-align="center center" layout-xs="column" layout-align-xs="space-between stretch">
+                                    <md-button flex-xs type="submit" class="md-raised md-primary" ng-click="vida.cotiza($event)" ng-disabled="vidaForm.$invalid">
+                                        Cotizar
+                                    </md-button>
+                                    <md-button flex-xs type="submit" class="md-raised md-primary" ng-click="vida.guarda($event)" ng-show="vida.muestraPrima" ng-disabled="!vida.online || vida.banGuardar || vidaForm.$invalid">
+                                        Guardar
+                                    </md-button>
+                                    <md-button flex-xs type="submit" class="md-raised md-primary" ng-click="vida.imprime($event)" ng-show="vida.banGuardado" ng-disabled="!vida.online || vidaForm.$invalid">
+                                        Imprimir
+                                    </md-button>
+                                    <md-button flex-xs type="submit" class="md-raised md-primary" ng-click="vida.continua($event)" ng-show="vida.banGuardado" ng-disabled="!vida.online || vidaForm.$invalid">
+                                        Continuar
+                                    </md-button>
+                                </div>
+                                <md-progress-linear ng-show="vida.loading" md-mode="indeterminate"></md-progress-linear>
+                </md-content>
+                </form>
+                </div>
+                </div>
+    </md-content>
+    </md-tab>
+    </md-tabs>
+    </md-content>
+</div>

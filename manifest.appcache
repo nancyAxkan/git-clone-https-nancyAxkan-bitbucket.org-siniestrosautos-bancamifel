@@ -1,0 +1,20 @@
+CACHE MANIFEST
+
+# 1.0.3
+
+assets/favicon.ico
+assets/icono_check.svg
+assets/icono_pdf.png
+assets/logo_mifel.png
+assets/logo_gnp.png
+assets/mifel_apoyoventa_ap.png
+assets/mifel_inicio.png
+assets/mifel_icono_ap_hover.png
+assets/mifel_icono_vida_hover.png
+assets/mifel_apoyoventa_vida.png
+assets/mifel_icono_ap.png
+assets/mifel_icono_vida.png
+assets/mifel_login.png
+
+NETWORK:
+*

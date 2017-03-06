@@ -1,0 +1,46 @@
+<md-dialog ng-controller="navegacionCtrl as nm">
+    
+    <md-dialog-content id="logindialog">
+        <form layout-align="start center" name="loginForm">
+            <!---<md-toolbar class="md-primary">
+                <h1 class="md-toolbar-tools">Inicio de sesión</h1>
+            </md-toolbar>--->
+            <md-toolbar class="md-accent md-hue-3">
+              <div class="md-toolbar-tools">
+                <h2>
+                  <span>Iniciar sesión</span>
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button md-primary" ng-click="nm.close()" aria-label="Cerrar login">
+                    <ng-md-icon icon="close"></ng-md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <div layout="column" layout-align="center center">
+                <div layout="row" flex="40" flex-xs="90" layout-align="center center">
+                    <md-input-container class="md-accent">
+                        <label>Usuario</label>
+                        <input type="email" required name="loginUser" ng-model="nm.usuario.usuario">
+                        <div class="md-accent" ng-messages="loginForm.loginUser.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            <div class="md-accent" ng-message="email">Capture una direccion de correo valida.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row" flex="40" flex-xs="90" layout-align="center center">
+                    <md-input-container class="md-accent">
+                        <label>Contrase&ntilde;a</label>
+                        <input type="password" required name="loginPwd"  ng-model="nm.usuario.pwd">
+                        <div class="md-accent" ng-messages="loginForm.loginPwd.$error" role="alert">
+                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row" flex="40" flex-xs="90" layout-align="center center">
+                    <md-button type="submit" class="md-primary md-raised" ng-click="nm.login()">Entrar</md-button>
+                </div>
+            </div>
+        </form>
+        
+    </md-dialog-content>
+</md-dialog>

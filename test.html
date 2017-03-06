@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html ng-app="mifel">
+    <head>
+        <title>Mifel - GNP</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+        <!-- include: "type": "css", "files": "app/**/*.css" -->
+        <link href="app/global.css" rel="stylesheet" type="text/css">
+        <link href="app/login/login.css" rel="stylesheet" type="text/css">
+        <link href="app/inicio/inicio.css" rel="stylesheet" type="text/css">
+        <link href="app/vida/vida.css" rel="stylesheet" type="text/css">
+        <link href="app/ap/ap.css" rel="stylesheet" type="text/css">
+        <link href="app/sesion/sesion.css" rel="stylesheet" type="text/css">
+        <link href="common/rzslider.min.css" rel="stylesheet" type="text/css">
+        <!-- /include -->
+        
+        <!-- include: "type": "css", "files": "common/**/*.css" -->
+        <link href="common/dataTable.css" rel="stylesheet" type="text/css">
+        <link href="common/material.css" rel="stylesheet" type="text/css">
+        <!-- /include -->
+        
+        <!-- Angular Material requires Angular.js Libraries -->
+        <script src="common/angular.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+        
+        <!-- Angular Material Library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.7.1/angular-material-icons.min.js"></script> 
+        
+        <!-- include: "type": "js", "files": "common/**/*.js" -->
+        <script src="common/angular-material-icons.min.js"></script>
+        <script src="common/angular-ui-router.min.js"></script>
+        <script src="common/dataTable.js"></script>
+        <script src="common/ng-map.min.js"></script>
+        <script src="common/rzslider.min.js"></script>
+        <!-- /include -->
+        
+        <!-- Firebase Library -->
+        <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
+        
+        <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
+        
+        <script type="text/javascript" src="common/jinqjs.js"></script>
+        
+        <!-- include: "type": "js", "files": "app/**/*.js" -->
+        <script src="app/app.js"></script>
+        <script src="app/app.exception.js"></script>
+        <script src="app/app.authObject.js"></script>
+        <script src="app/app.shared.js"></script>
+        <script src="app/app.directives.js"></script>
+
+        <script src="app/log/log.service.js"></script>
+        <script src="app/sucursales/sucursales.service.js"></script>
+        <script src="app/usuarios/usuarios.service.js"></script>
+        <script src="app/zonas/zonas.service.js"></script>
+        <script src="app/productos/productos.service.js"></script>
+        <script src="app/sucursales/sucursales.controller.js"></script>
+        <script src="app/usuarios/usuarios.controller.js"></script>
+        <script src="app/zonas/zonas.controller.js"></script>
+        <script src="app/productos/productos.controller.js"></script>
+        <!--script src="app/templates.js"></script-->
+        <!-- /include -->
+
+    </head>
+    <body ng-cloak>
+        
+        <div ng-controller="testCtrl as vm" layout>
+            <div flex style="overflow: hidden;">
+                <div layout="column" ui-view="principal" style="height: 700px;"></div>
+            </div>
+            <div flex style="overflow: hidden;">
+                <div layout="column" ui-view="principal1" style="height: 700px;"></div>
+            </div>
+        </div>
+        <div ui-view="princiapl2"></div>
+        
+        <script type="text/javascript">
+            (function(){
+                "use strict";
+            
+                angular
+                    .module("mifel")
+                    .config(ruteo)
+                    .controller("testCtrl", testCtrl);
+                
+                ruteo.$inject = ['$stateProvider', '$urlRouterProvider'];
+                
+                function ruteo($stateProvider, $urlRouterProvider) {
+                    $urlRouterProvider.when('', '/');
+                    
+                    $stateProvider
+                        .state('/', {
+                            url: '/',
+                            views: {
+                                'principal': {
+                                    templateUrl: "app/zonas/zonas.tpl.html",
+                                    controller: "zonasCtrl",
+                                    controllerAs: 'vm'
+                                },
+                                'principal1': {
+                                    templateUrl: "app/productos/productos.tpl.html",
+                                    controller: "productosCtrl",
+                                    controllerAs: 'vm'
+                                },
+                                'princiapl2': {
+                                    templateUrl: "app/usuarios/usuarios.tpl.html",
+                                    controller: "usuariosCtrl",
+                                    controllerAs: 'vm'
+                                }
+                            }
+                        });
+                }
+                
+                testCtrl.$inject = ["usuariosSrvc"];
+                
+                function testCtrl(usuariosSrvc) {
+                    var vm = this;
+                    
+                    vm.test = test;
+                    
+                    function test() {
+                        usuariosSrvc.addUsuario(vm.correo, "1234567890", "Alan W Cruz",  "-KTQZqPFBleIQQ53OFi5", 2, 0).then(function() {
+                            console.log(oAuth);
+                        });
+                    }
+                }
+            })();
+        </script>
+    </body>
+</html>

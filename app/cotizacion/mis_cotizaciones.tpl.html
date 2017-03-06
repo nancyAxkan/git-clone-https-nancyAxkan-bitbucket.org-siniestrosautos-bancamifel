@@ -1,0 +1,286 @@
+<div id="toaster"></div>
+<md-progress-linear ng-show="mc.loading" md-mode="indeterminate"></md-progress-linear>
+<md-content layout="row" layout-wrap layout-padding>
+    <md-input-container>
+        <label>Fecha inicio</label>
+        <md-datepicker ng-model="mc.fechaInicio" md-min-date="mc.minDate" md-max-date="mc.maxDate"></md-datepicker>
+    </md-input-container>
+    <md-input-container>
+        <label>Fecha fin</label>
+        <md-datepicker ng-model="mc.fechaFin" md-min-date="mc.fechaInicio" md-max-date="mc.maxDate"></md-datepicker>
+    </md-input-container>
+    <md-input-container>
+        <label>Tipo de operación</label>
+        <md-select ng-model="mc.operacion">
+            <md-option value="">---</md-option>
+            <md-option ng-repeat="opcion in mc.opciones" value="{{opcion.valor}}">
+                {{opcion.descripcion}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+        <label>Producto</label>
+        <md-select ng-model="mc.producto">
+            <md-option value="">---</md-option>
+            <md-option value="AP">Accidentes Personales</md-option>
+            <md-option value="VIDA">Vida</md-option>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+        <md-button ng-click="mc.filtrar()" class="md-raised md-primary">Filtrar</md-button>
+        <md-button ng-show="mc.admin" ng-disabled="mc.cotizaciones.length == 0" ng-click="mc.exportar()" class="md-raised md-warn">Exportar CSV</md-button>
+    </md-input-container>
+</md-content>
+<div layout="row" layout-xs="column" layout-sm="column" layout-align="start stretch" layout-padding class="mis_cotizaciones">
+    <div flex>
+        <md-content>
+            <md-list flex style="max-height:600px">
+                <md-subheader class="md-sticky md-primary">Selecciona un registro para ver su detalle</md-subheader>
+                <md-list-item class="md-2-line" ng-repeat="cotizacion in mc.cotizaciones" ng-click="mc.getDetalle(cotizacion)" ng-class="{'nav-active': cotizacion == mc.activeItem }">
+                    <md-icon class="material-icons">{{mc.getIcono(cotizacion.status)}}</md-icon>
+                    <div class="md-list-item-text" layout="row" layout-xs="column">
+                        <p flex="auto" style="font-size:12px !important">Empleado:  {{cotizacion.empleado}}</p>
+                        <p flex="auto" style="font-size:12px !important">Asegurado: {{cotizacion.nombre}} {{cotizacion.apPat}} {{cotizacion.apMat}}</p>
+                        <p flex="auto" style="font-size:12px !important">Operación: {{cotizacion.operacion}}</p>
+                        <p flex="auto" style="font-size:12px !important">Prima:     {{cotizacion.primaTotal  | currency}}</p>
+                        <p flex="auto" style="font-size:12px !important">Zona:      {{cotizacion.descripcionZona}}</p>
+                        <p flex="auto" style="font-size:12px !important">Sucursal:  {{cotizacion.descripcionSucursal}}</p>
+                        <p flex="auto" style="font-size:12px !important">Cotización:  {{mc.formatFecha(cotizacion.timestamp)}}</p>
+                        <p flex="auto" style="font-size:12px !important">Emisión:  {{mc.formatFecha(cotizacion.statusDate)}}</p>
+                    </div>
+                    <md-divider ng-if="!$last" inset></md-divider>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </div>
+    <div flex>
+        <md-content>
+            <md-subheader class="md-no-sticky">DETALLE DEL REGISTRO</md-subheader>
+            <section ng-show="mc.detalle" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Nombre: <span>{{mc.detalle.nombre}} {{mc.detalle.apPat}} {{mc.detalle.apMat}}</span></p>
+                <p>Edad: <span>{{mc.detalle.edad}}</span></p>
+                <p>Género: <span>{{mc.getGenero(mc.detalle.genero)}}</span></p>
+                <p>Forma de pago: <span>{{mc.detalle.formaPagoDesc}}</span></p>
+                <p>Prima Total: <span>{{mc.detalle.primaTotal  | currency}}</span></p>
+                <!--ap-->
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Suma asegurada: <span>{{ mc.detalle.detalleProducto.suma_asegurada | currency }}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Coberturas b&aacute;sicas: <span>Muerte Accidental (MXN): {{ mc.detalle.detalleProducto.suma_asegurada | currency }} Reembolso de Gastos Médicos por gastos funerarios (MXN): {{ mc.detalle.detalleProducto.reembolso_fun | currency }} Invalidez total y permanente (MXN): {{ mc.detalle.detalleProducto.invalidez | currency }} Pérdidas orgánicas (MXN): {{ mc.detalle.detalleProducto.perdidas_org | currency }} Reembolso de Gastos Médicos por accidente (MXN): {{ mc.detalle.detalleProducto.reembolso_acc | currency }} </span></p>
+                <!--vida-->
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Fallecimiento: <span>{{ mc.detalle.detalleProducto.suma_asegurada | currency }}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Coberturas adicionales: <span ng-repeat="cobertura in mc.detalle.coberturasAdicionales">{{cobertura.descripcion}} {{mc.detalle.detalleProducto.suma_asegurada | currency}} </span></p>
+                <!--Cotizacion-->
+                <p>Fecha de cotización: <span>{{mc.formatFecha(mc.detalle.timestamp)}}</span></p>
+                <!--Emision-->
+                <p ng-show="mc.detalle.status >= 1">Fecha de emisión: <span>{{mc.formatFecha(mc.detalle.statusDate)}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" class="md-no-sticky">DETALLE DE LA EMISIÓN</md-subheader>
+            <section ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p flex="100">Número de póliza: <span>{{mc.detalle.numeroReferencia}}</span></p>
+                <p>Tipo de producto: <span>{{mc.detalle.tipoProducto}}</span></p>
+                <p>Inicio de vigencia: <span>{{mc.detalle.emision.fechaInicioVigencia}}</span></p>
+                <p>Fin de vigencia: <span>{{mc.detalle.emision.fechaFinVigencia}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" class="md-no-sticky">DATOS DEL PLAN</md-subheader>
+            <section ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p flex="100">Producto: <span>{{mc.plan.plan}}</span></p>
+                <p>Suma Asegurada (MXN): <span>{{mc.plan.sumaAseg  | currency}}</span></p>
+                <p>Deducible (MXN): <span>{{mc.plan.deducible  | currency}}</span></p>
+                <p>Forma de pago: <span>{{mc.plan.formaPago}}</span></p>
+                <!--vida-->
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Indemnización por Muerte Accidental: <span>{{(mc.plan.ima)?"si":"no"}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Invalidez Sin Espera: <span>{{(mc.plan.ise)?"si":"no"}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Indemnización por Muerte Accidental con Pérdidas Orgánicas: <span>{{(mc.plan.diba)?"si":"no"}}</span></p>
+                <!--ap-->
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Muerte Accidental (MXN): <span>{{mc.plan.coberturasBasicas.muertAcc  | currency}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Reembolso de Gastos Médicos por gastos funerarios (MXN): <span>{{mc.plan.coberturasBasicas.reGMMFun  | currency}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Invalidez total y permanente (MXN): <span>{{mc.plan.coberturasBasicas.invalidez  | currency}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Pérdidas orgánicas (MXN): <span>{{mc.plan.coberturasBasicas.perdidas  | currency}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Reembolso de Gastos Médicos por accidente (MXN): <span>{{mc.plan.coberturasBasicas.accid  | currency}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" class="md-no-sticky">DATOS DEL SOLICITANTE TITULAR</md-subheader>
+            <section ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Primer apellido: <span>{{mc.solicitante.apPat}}</span></p>
+                <p>Segundo apellido: <span>{{mc.solicitante.apMat}}</span></p>
+                <p>Nombre(s): <span>{{mc.solicitante.nombre}}</span></p>
+                <p>Género: <span>{{mc.getGenero(mc.solicitante.genero)}}</span></p>
+                <p>Edad: <span>{{mc.solicitante.edad}}</span></p>
+                <p>Nacionalidad: <span>{{mc.solicitante.nacionalidad}}</span></p>
+                <p>Profesión: <span>{{mc.solicitante.profesion}}</span></p>
+                <p>R.F.C: <span>{{mc.solicitante.rfc}}</span></p>
+                <!--ap-->
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">CURP: <span>{{mc.solicitante.curp}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Fecha de nacimiento: <span>{{mc.solicitante.fechaNac}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Estado civil: <span>{{mc.solicitante.estadoCiv}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">País de Nacimiento: <span>{{mc.solicitante.ciudadNacimineto}}</span></p>
+                <!--vida-->
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Correo electrónico: <span>{{mc.solicitante.email}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Calle: <span>{{mc.solicitante.calle}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">No. exterior: <span>{{mc.solicitante.noExterior}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">No. interior: <span>{{mc.solicitante.noInterior}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Colonia: <span>{{mc.solicitante.colonia}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Municipio o Delegación: <span>{{mc.solicitante.municipio}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Estado: <span>{{mc.solicitante.estado}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">País: <span>{{mc.solicitante.pais}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">C.P.: <span>{{mc.solicitante.cp}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Dependencia: <span>{{mc.solicitante.Dependencia}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Cargo: <span>{{mc.solicitante.cargo}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Teléfono particular: <span>{{mc.solicitante.telefonoParticular}}</span></p>        
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Teléfono de oficina: <span>{{mc.solicitante.telefonoOficina}}</span></p>
+                <!--general-->
+                <p>Número Mifel: <span>{{mc.solicitante.mifel}}</span></p>
+            </section>
+            <!--md-subheader ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'AP'" class="md-no-sticky">DATOS LABORALES</md-subheader>
+            <section ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'AP'" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Nombre de la empresa donde trabaja: <span>{{mc.laborales.empresa}}</span></p>
+                <p>Profesión u ocupación: <span>{{mc.laborales.profesion}}</span></p>
+                <p>¿Nombre del puesto y en qué consisten sus labores?: <span>{{mc.laborales.puesto}}</span></p>
+                <p>CURP: <span>{{mc.laborales.curp}}</span></p>
+                <p>R.F.C. (Con homoclave): <span>{{mc.laborales.rfc}}</span></p>
+                <p>Giro de la empresa: <span>{{mc.laborales.giro}}</span></p>
+                <p>Domicilio del lugar de trabajo: <span>{{mc.laborales.domicilio}}</span></p>
+                <p>Alguna otra ocupación: <span>{{mc.laborales.otraOcupacion}}</span></p>
+                <p>Describa en qué consisten sus labores: <span>{{mc.laborales.otraOcupDesc}}</span></p>
+                <p>Empresa en que desempeña sus labores: <span>{{mc.laborales.otraOcupEmpr}}</span></p>
+            </section-->
+            <md-subheader ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'AP'" class="md-no-sticky">DOMICILIO PARTICULAR</md-subheader>
+            <section ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'AP'" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Calle: <span>{{mc.domicilio.calle}}</span></p>
+                <p>No. Exterior: <span>{{mc.domicilio.noExterior}}</span></p>
+                <p>No. Interior: <span>{{mc.domicilio.noInterior}}</span></p>
+                <p>Colonia: <span>{{mc.domicilio.colonia}}</span></p>
+                <p>Ciudad o Población: <span>{{mc.domicilio.ciudad}}</span></p>
+                <p>Municipio o Delegación: <span>{{mc.domicilio.municipio}}</span></p>
+                <p>Estado: <span>{{mc.domicilio.estado}}</span></p>
+                <p>C.P.: <span>{{mc.domicilio.cp}}</span></p>
+                <p>Teléfono particular: <span>{{mc.domicilio.telefono}}</span></p>
+                <p>Teléfono de oficina: <span>{{mc.domicilio.telefonoOficina}}</span></p>
+                <p>Correo electrónico: <span>{{mc.domicilio.email}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" class="md-no-sticky">DATOS DEL CONTRATANTE</md-subheader>
+            <section ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Primer apellido: <span>{{mc.contratante.apPat}}</span></p>
+                <p>Segundo apellido: <span>{{mc.contratante.apMat}}</span></p>
+                <p>Nombre(s): <span>{{mc.contratante.nombre}}</span></p>
+                <p>Género: <span>{{mc.getGenero(mc.contratante.genero)}}</span></p>
+                <p>Correo electrónico: <span>{{mc.contratante.email}}</span></p>
+                <p>R.F.C. (Con homoclave): <span>{{mc.contratante.rfc}}</span></p>
+                <p>CURP: <span>{{mc.contratante.curp}}</span></p>
+                <p>Calle: <span>{{mc.contratante.calle}}</span></p>
+                <p>C.P.: <span>{{mc.contratante.cp}}</span></p>
+                <p>No. Exterior: <span>{{mc.contratante.noExterior}}</span></p>
+                <p>No. Interior: <span>{{mc.contratante.noInterior}}</span></p>
+                <p>Colonia: <span>{{mc.contratante.colonia}}</span></p>
+                <p>Municipio o Delegación: <span>{{mc.contratante.municipio}}</span></p>
+                <p>Estado: <span>{{mc.contratante.estado}}</span></p>
+                <!--ap-->
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Ciudad o Población: : <span>{{mc.contratante.ciudad}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Parentesco: <span>{{mc.contratante.parentesco}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'AP'">Teléfono: <span>{{mc.contratante.telefono}}</span></p>
+                <!--vida-->
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">País: <span>{{mc.contratante.pais}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Nacionalidad: <span>{{mc.contratante.nacionalidad}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Profesión: <span>{{mc.contratante.profesion}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Dependencia: <span>{{mc.contratante.Dependencia}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Cargo: <span>{{mc.contratante.cargo}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Teléfono de oficina:<span>{{mc.contratante.telefonoOficina}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Teléfono particular:<span>{{mc.contratante.telefonoParticular}}</span></p>
+                <p ng-show="mc.detalle.tipoProducto == 'VIDA'">Número de serie de certificado digital de la FIEL:<span>{{mc.contratante.fiel}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" class="md-no-sticky">DATOS DEL BENEFICIARIO</md-subheader>
+            <section ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p ng-repeat="beneficiario in mc.beneficiario">
+                    Primer apellido: <span>{{beneficiario.apPat}}</span>&nbsp;
+                    Segundo apellido: <span>{{beneficiario.apMat}}</span>&nbsp;
+                    Nombre(s): <span>{{beneficiario.nombre}}</span>&nbsp;
+                    Parentesco: <span>{{beneficiario.parentesco}}</span>&nbsp;
+                    Porcentaje: <span>{{beneficiario.porcentaje}}%</span>&nbsp;
+                    <!--vida-->
+                    <label ng-show="mc.detalle.tipoProducto == 'VIDA'">Fecha de nacimiento: <span>{{beneficiario.fechaNacimiento}}</span></label>
+                </p>
+            </section>
+            <!--vida-->
+            <md-subheader ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'VIDA' && mc.contingente" class="md-no-sticky">DATOS DEL BENEFICIARIO CONTINGENTE</md-subheader>
+            <section ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'VIDA' && mc.contingente" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p ng-repeat="contingente in mc.contingente">
+                    Primer apellido: <span>{{contingente.apPat}}</span>&nbsp;
+                    Segundo apellido: <span>{{contingente.apMat}}</span>&nbsp;
+                    Nombre(s): <span>{{contingente.nombre}}</span>&nbsp;
+                    Parentesco: <span>{{contingente.parentesco}}</span>&nbsp;
+                    Porcentaje: <span>{{contingente.porcentaje}}%</span>&nbsp;
+                    Pertenece a: <span>{{contingente.perteneceContingente}}</span>
+                </p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" class="md-no-sticky">DATOS CONSENTIMIENTO</md-subheader>
+            <section ng-show="mc.detalle.status == 1 || mc.detalle.status == 2" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Solicitante Titular (y de su Representante Legal si es menor de edad): <span>{{mc.consentimiento.solicitanteTitular}}</span></p>
+                <p>Contratante (Solo si es diferente al Solicitante): <span>{{mc.consentimiento.contratante}}</span></p>
+            </section>
+            <!--vida-->
+            <md-subheader ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'VIDA'" class="md-no-sticky">DATOS SALUD</md-subheader>
+            <section ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2) && mc.detalle.tipoProducto == 'VIDA'" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>¿Ha fumado en los últimos 12 meses?: <span>{{(mc.salud.fuma == 1)?"si":"no"}}</span></p>
+            </section>
+            <!--vida-->
+            <md-subheader ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2)" class="md-no-sticky">DATOS IMPORTANTE</md-subheader>
+            <section ng-show="(mc.detalle.status == 1 || mc.detalle.status == 2)" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>¿Tiene o ha tenido nexos o vínculos con la delincuencia organizada; o ha sido sujeto a procedimiento legal o 
+                investigación por los delitos establecidos en el Código Penal Federal relativos a la delincuencia organizada, en territorio nacional o extranjero, por alguna 
+                autoridad de México o por alguna autoridad extranjera cuyo gobierno tenga celebrado con México tratado internacional; o ha estado su nombre, alias o 
+                apoda, sus actividades, los bienes asegurar o su nacionalidad, publicados en una lista oficial, nacional o extranjera, relativa a los delitos vinculados 
+                con los artículos anteriormente citados?:</p>
+                <p>Solicitante: <span>{{mc.nexos.solicitante}}</span></p>
+                <p>Contratante: <span>{{mc.nexos.contratante}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 && mc.cobranza" class="md-no-sticky">DATOS DE COBRANZA</md-subheader>
+            <section ng-show="mc.detalle.status == 1 && mc.cobranza && (mc.cobranza.viaPago == 'credito' || mc.cobranza.viaPago == 'debito')" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Periodicidad de pago: <span>{{mc.plan.formaPago}}</span></p>
+                <p>Via de pago: <span>{{mc.cobranza.viaPago}}</span></p>
+                <p>Banco: <span>{{mc.cobranza.tarjetaObligatoria.banco}}</span></p>
+                <p>Tarjeta número: <span>{{mc.cobranza.tarjetaObligatoria.numero}}</span></p>
+                <p>Fecha de vencimiento: <span>{{mc.cobranza.tarjetaObligatoria.mesExpiracion}} / {{mc.cobranza.tarjetaObligatoria.agnoExpiracion}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 1 && mc.cobranza  && (mc.cobranza.viaPago == 'credito' || mc.cobranza.viaPago == 'debito')" class="md-no-sticky">DATOS DE COBRANZA OPCIONAL</md-subheader>
+            <section ng-show="mc.detalle.status == 1 && mc.cobranza && (mc.cobranza.viaPago == 'credito' || mc.cobranza.viaPago == 'debito')" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Periodicidad de pago: <span>{{mc.plan.formaPago}}</span></p>
+                <p>Via de pago: <span>{{mc.cobranza.viaPago}}</span></p>
+                <p>Banco: <span>{{mc.cobranza.tarjetaOpcional.banco}}</span></p>
+                <p>Tarjeta número: <span>{{mc.cobranza.tarjetaOpcional.numero}}</span></p>
+                <p>Fecha de vencimiento: <span>{{mc.cobranza.tarjetaOpcional.mesExpiracion}} / {{mc.cobranza.tarjetaOpcional.agnoExpiracion}}</span></p>
+            </section>
+            <section ng-show="mc.detalle.status == 1 && mc.cobranza && mc.cobranza.viaPago == 'clabe'" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Periodicidad de pago: <span>{{mc.plan.formaPago}}</span></p>
+                <p>Via de pago: <span>{{mc.cobranza.viaPago}}</span></p>
+                <p>Banco: <span>{{mc.cobranza.datosClabe.banco}}</span></p>
+                <p>Número clabe: <span>{{mc.cobranza.datosClabe.numeroClabe}}</span></p>
+            </section>
+            <section ng-show="mc.detalle.status == 1 && mc.cobranza && mc.cobranza.viaPago != 'pagoRef'" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>¿El contratante es igual al titular de la cuenta/tarjeta?: <span>{{mc.cobranza.titular}}</span></p>
+                <p ng-show="mc.cobranza.titular == 'no'">Nombre del titular: <span>{{mc.cobranza.nombreTitular}}</span></p>
+                <p ng-show="mc.cobranza.titular == 'no'">¿Parentesco del contratante con el titular de la cuenta/tarjeta?: <span>{{mc.cobranza.parentescoTitular}}</span></p>
+            </section>
+            <section ng-show="mc.detalle.status == 1 && mc.cobranza && mc.cobranza.viaPago == 'pagoRef'" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>PAGO REFERENCIADO</p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 4" class="md-no-sticky">EMISION PENDIENTE</md-subheader>
+            <section ng-show="mc.detalle.status == 4" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Esta emision ha cambiado su estado a "pendiente" por las siguientes observaciones: <span>{{mc.detalle.observacion}}</span></p>
+            </section>
+            <md-subheader ng-show="mc.detalle.status == 5" class="md-no-sticky">COTIZACIÓN NO EMITIDA</md-subheader>
+            <section ng-show="mc.detalle.status == 5" layout="row" layout-padding layout-align="start center" layout-wrap class="campos">
+                <p>Esta cotización no ha sido emitida por las siguientes observaciones: <span>{{mc.detalle.observacion}}</span></p>
+            </section>
+            <md-input-container layout="row" layout-align="space-around center">
+                <md-button ng-show="mc.detalle.status == 1 && mc.admin" class="md-raised md-primary" ng-disabled="!mc.online" ng-click="mc.cancelar()">No Emitida</md-button>
+                <md-button ng-show="mc.detalle.status == 1 && mc.admin" class="md-raised md-primary" ng-disabled="!mc.online" ng-click="mc.pendiente()">Pendiente</md-button>
+                <md-button ng-show="mc.detalle.status == 1 && mc.admin" class="md-raised md-primary" ng-disabled="!mc.online" ng-click="mc.emitida()">Emitida</md-button>
+            </md-input-container>
+            <md-input-container layout="row" layout-align="center center">
+                <md-button ng-show="mc.detalle.status == 4 && mc.admin" class="md-raised md-primary" ng-disabled="!mc.online" ng-click="mc.cancelar()">No Emitida</md-button>
+                <md-button ng-show="mc.detalle.status == 4 && mc.admin" class="md-raised md-primary" ng-disabled="!mc.online" ng-click="mc.emitida()">Emitida</md-button>
+            </md-input-container>            
+            <md-input-container layout="row" layout-align="center center">
+                <md-button ng-show="mc.detalle.status == 0" class="md-raised md-primary" ng-click="mc.comprar()">Comprar</md-button>
+            </md-input-container>
+        </md-content>
+    </div>
+</div>

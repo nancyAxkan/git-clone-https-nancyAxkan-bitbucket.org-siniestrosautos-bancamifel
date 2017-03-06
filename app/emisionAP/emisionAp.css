@@ -1,0 +1,88 @@
+.md-datepicker-input-container > .md-datepicker-input{
+    width: 160px;
+}
+.mifel_emisionAp .header_cotiza {
+    color:#FFFFFF;
+    text-align: center;
+    margin-bottom: 8px;
+}
+.mifel_emisionAp .header_cotiza .titulo {
+    background: #004681;
+    font-weight: bold;
+    line-height: 60px;
+}
+.mifel_emisionAp .header_cotiza .prima {
+    background: #004681;
+    margin-top: 1px;
+    padding: 10px 0px;
+}
+.mifel_emisionAp .header_cotiza .prima span {
+    font-weight: lighter;
+    font-style: italic;
+    display: inline-block;
+}
+.mifel_emisionAp .header_cotiza .prima div span {
+     font-style: normal;
+     font-size: 25px;
+}
+.mifel_emisionAp .header_cotiza .prima .precio {
+    font-size: 70px;
+    font-style: normal;
+    padding: 0px;
+}
+.mifel_emisionAp .header_cotiza .prima sup {
+    font-size: 25px;
+}
+.mifel_emisionAp .header_cotiza .plan {
+    font-weight: bold;
+    background: #43C2BE;
+    padding: 8px 0px;
+    font-size: 15px;
+    line-height: 20px;
+    text-transform: uppercase;
+}
+.mifel_emisionAp .md-subhead {
+    color: rgb(0,71,124);
+}
+
+.mifel_emisionAp .nota{
+    color: #ff0000;
+}
+
+.mifel_emisionAp .ahorro {
+    -webkit-transition: text-shadow 0.7s linear;
+    -moz-transition: text-shadow 0.7s linear;
+    -ms-transition: text-shadow 0.7s linear;
+    -o-transition: text-shadow 0.7s linear;
+    transition: text-shadow 0.7s linear;
+    font-size: 18px;
+}
+
+.mifel_emisionAp .ahorro.glow {
+    text-shadow: 0 0 10px #fda904;
+}
+
+.mifel_emisionAp .hint {
+    /* Position the hint */
+    position: absolute;
+    left: 2px;
+    right: auto;
+    bottom: -7px;
+    /* Copy styles from ng-messages */
+    font-size: 12px;
+    line-height: 14px;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    /* Set our own color */
+    color: #FF5722;
+}
+.mifel_emisionAp .hint.ng-hide,
+.mifel_emisionAp .hint.ng-enter,
+.mifel_emisionAp .hint.ng-leave.ng-leave-active {
+    bottom: 26px;
+    opacity: 0;
+}
+.mifel_emisionAp .hint.ng-leave,
+.mifel_emisionAp .hint.ng-enter.ng-enter-active {
+    bottom: -7px;
+    opacity: 1; 
+}

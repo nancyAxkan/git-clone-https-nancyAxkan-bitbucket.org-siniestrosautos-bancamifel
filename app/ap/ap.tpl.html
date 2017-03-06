@@ -1,0 +1,201 @@
+<div class="mifel_ap">
+    <div layout="column"  layout-align="center center">
+        <div flex>
+            <h1>Protección Accidentes</h1>
+        </div>
+        <span class="divisor"></span>
+        <div flex>
+            <h3>Protección por accidentes con las mejores coberturas.</h3>
+        </div>
+    </div>
+    <md-content class="md-padding">
+        <md-tabs md-selected="1" md-dynamic-height md-border-bottom>
+            <md-tab label="Más Detalles">
+                <md-content>
+                    <div layout="row" layout-xs="column" layout-align="start center" layout-padding class="apoyos">
+                        <div flex="50" hide-xs></div>
+                        <div flex="50" flex-xs="100" flex-sm="100">
+                            <iframe class="iframe" src="https://107.178.223.113/index.php/mifel-ap"></iframe>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Cotizador">
+                <md-content>
+                    <div layout="row" layout-xs="column" layout-align="center start">
+                        <div flex>
+                            <p class="titulo_azul">Tu paquete incluye los siguientes servicios:</p>
+                            <div layout="column" layout-padding>
+                                <div>
+                                    <md-icon md-svg-src="/assets/icono_check.svg" aria-label="ASISTENCIA MÉDICA"></md-icon>
+                                    ASISTENCIA MÉDICA
+                                </div>
+                                <div>
+                                    <md-icon md-svg-src="/assets/icono_check.svg" aria-label="ASISTENCIA FITNESS"></md-icon>
+                                    ASISTENCIA NUTRICIONAL
+                                </div>
+                                <div>
+                                    <md-icon md-svg-src="/assets/icono_check.svg" aria-label="ASISTENCIA NUTRICIONAL"></md-icon>
+                                    ASISTENCIA PSICOLÓGICA
+                                </div>
+                            </div>
+                        </div>
+                        <div flex>
+                            <div class="header_cotiza">
+                                <div class="titulo">Protección Accidentes</div>
+                                <div class="prima" ng-show="ap.muestraPrima">
+                                    <span>Prima Total</span>
+                                    <div>
+                                        <span class="precio">{{ap.primaTotal | currency}}</span>
+                                        <span>MXN</span>
+                                    </div>
+                                    <span>{{ap.periodosPrima}} Pago(s) de {{ap.pagoFraccionado | currency}}</span><br>
+                                </div>
+                                <div class="plan">
+                                    <span ng-show="ap.muestraAhorro">Pagando de forma Anual tu </span><span ng-class="ap.glow ? 'ahorro glow' : 'ahorro'" ng-show="ap.muestraAhorro">ahorro</span> <span ng-show="ap.muestraAhorro">sería de: {{ap.montoAhorro | currency}}</span>
+                                </div>
+                            </div>
+                            <form name="apForm" id="apForm">
+                                <span>Datos del solicitante titular</span>
+                                <md-content layout-padding>
+                                    <md-input-container>
+                                        <label>Apellido paterno</label>
+                                        <input type="text" required md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" name="apePaterno" ng-model="ap.apePaterno">
+                                        <div class="md-accent" ng-messages="apForm.apePaterno.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido</div>
+                                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Apellido materno</label>
+                                        <input type="text" required md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" name="apeMaterno" ng-model="ap.apeMaterno">
+                                        <div class="md-accent" ng-messages="apForm.apeMaterno.$error" role="alert">
+                                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                            <div class="md-accent" ng-message="pattern">Captura carácteres válidoss</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Nombre</label>
+                                        <input type="text" required md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" name="nombre" ng-model="ap.nombre">
+                                        <div class="md-accent" ng-messages="apForm.nombre.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido</div>
+                                            <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                            <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                        </div>
+                                    </md-input-container> 
+                                    <md-input-container>
+                                        <label>Edad (Años)</label>
+                                        <input type="number" min="18" max="74" ng-pattern="/[0-9]{2}$/" required name="edad" ng-model="ap.edad">
+                                        <div class="md-accent" ng-messages="apForm.edad.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido</div>
+                                            <div class="md-accent" ng-message="min">Debe ser mayor de 18 años</div>
+                                            <div class="md-accent" ng-message="max">Debe ser menor de 74 años</div>
+                                            <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <md-radio-group required="true" name="sexo" ng-model="ap.sexo">
+                                            <div layout="row" layout-padding layout-align="start center">
+                                                <label>Género *</label>
+                                                <md-radio-button flex value="m">Femenino</md-radio-button>
+                                                <md-radio-button flex value="h">Masculino</md-radio-button>
+                                            </div>
+                                        </md-radio-group>
+                                        <div class="radioRequerido" ng-show="apForm.sexo.$error.required">Campo requerido.</div>
+                                    </md-input-container>
+                                </md-content>
+                                <span>Datos del plan</span>
+                                <md-content layout-padding>
+                                    <md-input-container class="md-block">
+                                        <label>Forma de pago</label>
+                                        <md-select required="true" name="formaPago" ng-model="ap.formaPago">
+                                            <md-option value="default">Seleccione</md-option>
+                                            <md-option ng-repeat="fp in ap.formasPagoCat" ng-selected="{{ fp.default === 1 ? 'true' : 'false' }}"  value="{{fp.$id}}">{{fp.texto}}</md-option>
+                                        </md-select>
+                                        <div class="md-accent" ng-messages="apForm.formaPago.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block">
+                                        <label>Suma asegurada AP</label>
+                                        <md-select required="true" name="sumaAse" ng-model="ap.sumaAse" ng-change="ap.updateCoberturasYDeducible($event)">
+                                            <md-option value="default">Seleccione</md-option>
+                                            <md-option ng-repeat="sa in ap.productos  | filter: ap.filtroProductos | orderBy: ap.numeroSuma" ng-selected="{{ sa.default === 1 ? 'true' : 'false' }}" value="{{sa.$id}}">{{sa.suma_asegurada | currency}}</md-option>
+                                        </md-select>
+                                        <div class="md-accent" ng-messages="apForm.proteccionCon.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                        </div>
+                                    </md-input-container>
+                                     <md-input-container class="md-block">
+                                        <label>Deducible (Aplica para cobertura Reembolso de Gastos Médicos por Accidente)</label>
+                                        <input type="text" value="{{ap.deducible | currency}}" ng-disabled="true">
+                                        <md-input type="text" name="deducible" ng-model="ap.deducible" ng-hide="true">
+                                    </md-input-container>
+                                </md-content>
+                                <!--md-content layout-padding>
+                                    <md-input-container class="md-block">
+                                        <label>Deducible (Aplica para cobertura Reembolso de Gastos Médicos por Accidente)</label>
+                                        <input type="text" value="{{ap.deducible | currency}}" ng-disabled="true">
+                                        <md-input type="text" name="deducible" ng-model="ap.deducible" ng-hide="true">
+                                    </md-input-container>
+                                    <!--md-input-container>
+                                        <label>Deducible</label>
+                                        <md-select required="true" name="deducible" ng-model="ap.deducible">
+                                            <md-option ng-repeat="sa in ap.deducibles" value="{{sa.$id}}" >{{sa.deducible | currency}}</md-option>
+                                        </md-select>
+                                        <div class="md-accent" ng-messages="apForm.deducible.$error" role="alert">
+                                            <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                        </div>
+                                    </md-input-container>
+                                </md-content-->
+                                <span>Coberturas básicas</span>
+                                <md-content layout-padding>
+                                    <div layout="column">
+                                        <div flex layout="row">
+                                            <div flex="60">Muerte Accidental</div>
+                                            <div flex="40" style="color:#43C2BE" layout-align="center right" ng-show="ap.muestraCoberturas"><b>{{ap.cobMuerteAcc | currency}}</b></div>
+                                        </div>
+                                        <div flex layout="row">
+                                            <div flex="60">Invalidez Total y Permanente</div>
+                                            <div flex="40" style="color:#43C2BE" layout-align="center right" ng-show="ap.muestraCoberturas"><b>{{ap.cobInvalidez | currency}}</b></div>
+                                        </div>
+                                        <div flex layout="row">
+                                            <div flex="60">Reembolso de Gastos Médicos por Accidente</div>
+                                            <div flex="40" style="color:#43C2BE" layout-align="center right" ng-show="ap.muestraCoberturas"><b>{{ap.cobReemGasAcc | currency}}</b></div>
+                                        </div>
+                                        <div flex layout="row">
+                                            <div flex="60">Reembolso de Gastos Funerarios</div>
+                                            <div flex="40" style="color:#43C2BE" layout-align="center right" ng-show="ap.muestraCoberturas"><b>{{ap.cobReemGasFun | currency}}</b></div>
+                                        </div>
+                                        <div flex layout="row">
+                                            <div flex="60">Pérdidas Orgánicas</div>
+                                            <div flex="40" style="color:#43C2BE" layout-align="center right" ng-show="ap.muestraCoberturas"><b>{{ap.cobPerdidaOr | currency}}</b></div>
+                                        </div>
+                                    </div>
+                                </md-content>
+                                <md-content layout-padding>
+                                    <div layout="row" layout-align="center center" layout-xs="column" layout-align-xs="space-between stretch">
+                                        <md-button flex-xs type="submit" class="md-raised md-primary" ng-click="ap.cotizar($event)"  ng-disabled="apForm.$invalid">
+                                            Cotizar
+                                        </md-button>
+                                        <md-button flex-xs type="submit" class="md-raised md-primary"  ng-click="ap.guarda($event)" ng-show="ap.muestraPrima" ng-disabled="!ap.online || ap.banGuardar || apForm.$invalid">
+                                            Guardar
+                                        </md-button>
+                                        <md-button flex-xs type="submit" class="md-raised md-primary" ng-click="ap.imprime($event)" ng-show="ap.banGuardado" ng-disabled="!ap.online || apForm.$invalid">
+                                            Imprimir
+                                        </md-button>
+                                        <md-button flex-xs type="submit" class="md-raised md-primary" ng-click="ap.continua($event)" ng-show="ap.banGuardado" ng-disabled="!ap.online || apForm.$invalid">
+                                            Continuar
+                                        </md-button>
+                                    </div>
+                                </md-content>
+                                <md-progress-linear ng-show="ap.loading" md-mode="indeterminate"></md-progress-linear>
+                            </form>
+                        </div>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-content>
+</div>

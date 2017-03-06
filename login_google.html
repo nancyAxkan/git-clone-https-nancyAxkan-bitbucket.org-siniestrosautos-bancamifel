@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<head>
+    <title>Mifel - GNP</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        html, body {
+            background-color: #FFF;
+            font-family: "Helvetica";
+            color: #333;
+        }
+        .barraLogos img {
+            padding: 5px 20px;
+        }
+        .load {
+            width: 100%;
+            min-height: 520px;
+            text-align: center;
+            padding-top: 160px;
+        }
+        .load img {
+            margin: 160px 0px;
+        }
+        footer {
+            text-align: right;
+        }
+        footer p, footer a, footer a:hover, footer a:visited {
+            color: #004681;
+            text-decoration: none;
+        }
+        md-content.md-default-theme, md-content, .md-subheader.md-default-theme, .md-subheader{
+            background-color: #FFF;
+        }
+        #redireccion {
+            display: none;
+        }
+    </style>
+    <link href="assets/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+</head>    
+<body>
+    <header ng-cloak>
+        <div flex layout="row" layout-align="space-between center" layout-align-xs="center center" class="barraLogos">
+            <img src='assets/logo_mifel.png' title="logo mifel" style="float: left;"/>
+            <img src='assets/logo_gnp.png' title="logo gnp" style="float: right;"/>
+        </div>
+    </header>
+    <div id="load" class="load">
+        <div id="mensaje"></div>
+        <div id="redireccion">
+            <p>Redireccionando en <span id="counter">5</span> segundos...</p>
+        </div>
+        <style type='text/css'> 
+            @-ms-keyframes uil-ring-anim{0%{-ms-transform:rotate(0);-moz-transform:rotate(0);-webkit-transform:rotate(0);-o-transform:rotate(0);transform:rotate(0)}100%{-ms-transform:rotate(360deg);-moz-transform:rotate(360deg);-webkit-transform:rotate(360deg);-o-transform:rotate(360deg);transform:rotate(360deg)}}@-moz-keyframes uil-ring-anim{0%{-ms-transform:rotate(0);-moz-transform:rotate(0);-webkit-transform:rotate(0);-o-transform:rotate(0);transform:rotate(0)}100%{-ms-transform:rotate(360deg);-moz-transform:rotate(360deg);-webkit-transform:rotate(360deg);-o-transform:rotate(360deg);transform:rotate(360deg)}}@-webkit-keyframes uil-ring-anim{0%{-ms-transform:rotate(0);-moz-transform:rotate(0);-webkit-transform:rotate(0);-o-transform:rotate(0);transform:rotate(0)}100%{-ms-transform:rotate(360deg);-moz-transform:rotate(360deg);-webkit-transform:rotate(360deg);-o-transform:rotate(360deg);transform:rotate(360deg)}}@-o-keyframes uil-ring-anim{0%{-ms-transform:rotate(0);-moz-transform:rotate(0);-webkit-transform:rotate(0);-o-transform:rotate(0);transform:rotate(0)}100%{-ms-transform:rotate(360deg);-moz-transform:rotate(360deg);-webkit-transform:rotate(360deg);-o-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes uil-ring-anim{0%{-ms-transform:rotate(0);-moz-transform:rotate(0);-webkit-transform:rotate(0);-o-transform:rotate(0);transform:rotate(0)}100%{-ms-transform:rotate(360deg);-moz-transform:rotate(360deg);-webkit-transform:rotate(360deg);-o-transform:rotate(360deg);transform:rotate(360deg)}}.uil-ring-css{background:0 0;position:relative;width:260px;height:200px;margin:0 auto}.uil-ring-css>div{text-align:center;display:block;width:260px;height:260px;top:20px;left:20px;border-radius:130px;box-shadow:0 6px 0 0 #59ebff;-ms-animation:uil-ring-anim 1s linear infinite;-moz-animation:uil-ring-anim 1s linear infinite;-webkit-animation:uil-ring-anim 1s linear infinite;-o-animation:uil-ring-anim 1s linear infinite;animation:uil-ring-anim 1s linear infinite}
+        </style> 
+        <div class='uil-ring-css' style='transform:scale(0.6);'><div></div></div>
+    </div>
+    <footer>
+        <div flex layout="row" layout-align="end stretch" layout-padding>
+            <p>&#9400; 2016 Todos los Derechos Reservados de Grupo Nacional Provincial | 
+            <a href="https://www.gnp.com.mx/wps/portal/portalesgnp/anexos/aviso-privacidad" target="_blank">Aviso de privacidad</a></p>
+        </div>
+    </footer>
+</body>
+</html>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script type="text/javascript">
+    var config = {
+        apiKey: "AIzaSyBmDcnyQfF10vTuU7Gu9I1tGoAZDyiQ27U",
+        authDomain: "gnp-mifel-firebase.firebaseapp.com",
+        databaseURL: "https://gnp-mifel-firebase.firebaseio.com",
+        storageBucket: "gnp-mifel-firebase.appspot.com",
+        messagingSenderId: "1066275296921"
+    };
+    firebase.initializeApp(config);
+
+    function login(){
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+         
+            var token = result.credential.accessToken;
+            var user = result.user;
+
+            if(user.email === getParameter('email')){
+                document.getElementById("mensaje").innerHTML = ("Bienvenido " + user.email);
+                var dbRefUser = "usuario/" + user.uid;
+                firebase.database().ref(dbRefUser).on("value",function(data){
+                    oUser = data.val();
+                    if(oUser != null && oUser.activo) {
+                        var actualFecha = "Última sesión: "+new Date().toLocaleDateString()+" a las "+new Date().toLocaleTimeString().substring(0, 5)+" hrs.";
+                        var ultimaFecha = (oUser.actualSesion != undefined && oUser.actualSesion != "")? oUser.actualSesion : actualFecha;
+
+                        firebase.database().ref(dbRefUser).update({ "actualSesion" : actualFecha, "ultimaSesion" : ultimaFecha });
+                        redireccion(5, document.location.origin + "/index.html#/inicio?email="+getParameter('email'));
+                    }else{
+                        firebase.auth().signOut();
+                        document.getElementById("mensaje").innerHTML = "La sesión de <b>Gmail</b> iniciada no concuerda con tu sesión de <b>Portal GNP</b>, inicia sesión con tu correo corporativo";
+                        redireccion(10, document.location.origin + "/index.html#/?email="+getParameter('email'));
+                    }
+                });
+            }else{
+                firebase.auth().signOut();
+                document.getElementById("mensaje").innerHTML = "La sesión de <b>Gmail</b> iniciada no concuerda con tu sesión de <b>Portal GNP</b>, inicia sesión con tu correo corporativo";
+                redireccion(10, document.location.origin + "/index.html#/?email="+getParameter('email'));
+            }            
+          
+        }).catch(function(error) {
+            
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage);
+            
+            firebase.auth().signOut();
+            document.getElementById("mensaje").innerHTML = "La sesión <b>Gmail</b> iniciada no concuerda con la sesion del <b>Portal GNP</b>, inicia sesión con tu correo corporativo";
+            redireccion(10, document.location.origin + "/index.html");
+          
+        });
+    }
+
+    function redireccion(iSegundos, sUrl){
+        document.getElementById("redireccion").style.display = "block";
+        document.getElementById("counter").innerHTML = iSegundos;
+        idInter = setInterval(function() {
+            var div = document.querySelector("#counter");
+            var count = div.textContent * 1 - 1;
+            if (count <= 0) {
+                window.location = sUrl;
+                clearInterval(idInter);
+                div.textContent = 0;
+            } else {
+                div.textContent = count;    
+            }
+        }, 1000);
+    }
+
+    function getParameter(name) {
+        url = location.href;
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var results = regex.exec( url );
+        return results == null ? null : results[1];
+    }
+
+    login(); 
+</script>

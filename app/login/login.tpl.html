@@ -1,0 +1,39 @@
+<div layout="row" layout-xs="column" layout-align="space-between stretch" layout-align-xs="start stretch" class="mifel_login">
+    <div flex>
+        <form name="loginForm" class="form_container">
+            <input type="text" style="display:none">
+            <input type="password" style="display:none">
+            <md-toolbar>
+                <div class="md-toolbar-tools form_header">
+                    <h3>Login</h3>
+                </div>
+            </md-toolbar>
+            <md-content layout="column" layout-padding>
+                <md-input-container>
+                    <label>Correo</label>
+                    <input type="email" required name="loginUser" ng-model="lg.usuario.usuario">
+                    <div class="md-accent" ng-messages="loginForm.loginUser.$error" role="alert">
+                        <div class="md-accent" ng-message="required">Campo requerido.</div>
+                        <div class="md-accent" ng-message="email">El correo electrónico proporcionado es incorrecto, por favor ingréselo en el siguiente formato: usuario/a@dominio Ej: ejemplo@bancamifel.com.mx ¡Gracias!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Contrase&ntilde;a</label>
+                    <input type="password" required name="loginPwd"  ng-model="lg.usuario.pwd">
+                    <div class="md-accent" ng-messages="loginForm.loginPwd.$error" role="alert">
+                        <div class="md-accent" ng-message="required">Campo requerido.</div>
+                    </div>
+                </md-input-container>
+            </md-content>
+            <div class="form_footer" layout="column">
+                <md-progress-linear ng-show="lg.loading" md-mode="indeterminate"></md-progress-linear>
+                <md-button type="submit" ng-click="lg.login()" ng-disabled="loginForm.$invalid">Iniciar Sesión</md-button>
+            </div>
+        </form>
+    </div>
+    <div flex layout="column" layout-align="end stretch">
+        <div class="titulo">
+            <p>La protecci&oacute;n que necesitas, <br /> para seguir disfrutando de momentos increíbles</p>
+        </div>
+    </div>
+</div>

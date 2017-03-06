@@ -1,0 +1,55 @@
+@media only screen and (min-width: 500px) {
+    .mifel_inicio {
+        background: url(/assets/mifel_inicio.png);
+    }
+
+}
+@media only screen and (max-width: 500px) {
+    .mifel_inicio {
+        background:-webkit-linear-gradient(281deg,#0c63aa 40%,#7ac4fa 100%);
+        background:linear-gradient(169deg,#0c63aa 40%,#7ac4fa 100%);
+        background-color:#0c63aa
+    }
+    .mifel_inicio h1 {
+        color:#FFF !important;
+        font-weight: normal;    
+    }
+}
+
+.mifel_inicio {
+    background-position: 0 280px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align:center;
+    min-height: 600px;
+    color:#FFF;
+}
+.mifel_inicio h1 {
+    color:#AAA;
+    font-weight: normal;    
+}
+.mifel_inicio h3 {
+    color:#DDD;
+    font-weight: normal;
+}
+.mifel_inicio a {
+    width:214px;
+    height:245px;
+    display: inline-block;
+}
+.mifel_inicio .divisor {
+    border-top: 5px solid #43C2BE;
+    width: 95px;
+}
+.mifel_inicio .btn_vida{
+    background: url(/assets/mifel_icono_vida.png);
+}
+.mifel_inicio .btn_vida:hover{
+    background: url(/assets/mifel_icono_vida_hover.png);
+}
+.mifel_inicio .btn_ap{
+    background: url(/assets/mifel_icono_ap.png);
+}
+.mifel_inicio .btn_ap:hover{
+    background: url(/assets/mifel_icono_ap_hover.png);
+}

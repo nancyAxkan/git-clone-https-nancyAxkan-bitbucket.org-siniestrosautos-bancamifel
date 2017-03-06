@@ -1,0 +1,140 @@
+@media only screen and (min-width: 500px) {
+    .mifel_vida .apoyos {
+        background: url(/assets/mifel_apoyoventa_vida.png);
+    }
+    .mifel_vida .header_cotiza .prima .precio {
+        font-size: 70px;
+    }
+}
+@media only screen and (max-width: 500px) {
+    .mifel_vida .apoyos {
+        background: none;
+    }
+    .mifel_vida .header_cotiza .prima .precio {
+        font-size: 40px;
+    }
+}
+.mifel_vida md-content.md-padding{
+    padding-bottom: 0px;
+}
+.mifel_vida h1 {
+    text-align:center;
+    font-size: 45px;
+    font-weight: 400;
+    line-height: 45px;
+    margin: 50px 0px 19px 0px;
+    color: #868686;
+}
+.mifel_vida h3 {
+    color: #D6D6D6;
+    font-weight: lighter;
+    text-align: center;
+}
+.mifel_vida .divisor {
+    border-top: 5px solid #43C2BE;
+    width: 95px;
+}
+.mifel_vida .apoyos{
+    background-position: top center;
+    background-repeat: no-repeat;
+    min-height: 645px;
+}
+.mifel_vida .titulo_azul {
+    color: #004681;
+    font-size: 26px;
+}
+/********* Panel Uno *********/
+.mifel_vida p {
+    margin: 20px;
+    line-height: 30px;
+    text-shadow: 1px 1px #FFF;
+}
+.mifel_vida ul {
+    margin: 20px 10px;
+}
+.mifel_vida ul li {
+    margin: 20px 10px;
+    list-style-image: url(/assets/icono_pdf.png);
+    color: #AA9;
+}
+.mifel_vida ul li span {
+    font-size: 14px;
+    color:#000;
+}
+.mifel_vida .iframe {
+    border: 0px;
+    width: 100%;
+    height: 1600px;
+    overflow-y: hidden;
+    min-height: 1000px;
+}
+/********* Panel Dos *********/
+.mifel_vida md-icon {
+    width: 37px;
+    height: 29px;
+    margin-right: 5px;
+}
+.mifel_vida .header_cotiza {
+    color:#FFFFFF;
+    text-align: center;
+    margin-bottom: 8px;
+}
+.mifel_vida .header_cotiza .titulo {
+    background: #004681;
+    font-weight: bold;
+    line-height: 60px;
+    font-size: 21px;
+}
+.mifel_vida .header_cotiza .prima {
+    background: #004681;
+    margin-top: 1px;
+    padding: 10px 0px;
+}
+.mifel_vida .header_cotiza .prima span {
+    font-weight: lighter;
+    font-style: italic;
+    display: inline-block;
+}
+.mifel_vida .header_cotiza .prima div span {
+     font-style: normal;
+     font-size: 25px;
+}
+.mifel_vida .header_cotiza .prima .precio {
+    font-style: normal;
+    padding: 0px;
+}
+.mifel_vida .header_cotiza .prima sup {
+    font-size: 25px;
+}
+.mifel_vida .header_cotiza .plan {
+    background: #43C2BE;
+    padding: 8px 0px;
+    font-size: 18px;
+    line-height: 20px;
+    text-transform: uppercase;
+}
+.mifel_vida md-checkbox {
+    margin-bottom: 0px;
+}
+
+.ahorro {
+    -webkit-transition: text-shadow 0.7s linear;
+    -moz-transition: text-shadow 0.7s linear;
+    -ms-transition: text-shadow 0.7s linear;
+    -o-transition: text-shadow 0.7s linear;
+    transition: text-shadow 0.7s linear;
+    font-size: 21px;
+}
+
+.ahorro.glow {
+    text-shadow: 0 0 10px #fda904;
+}
+
+.radioRequerido {
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    opacity: 1;
+    margin-top: 0;
+    color: rgb(6,204,153);
+}

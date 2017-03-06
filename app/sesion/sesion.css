@@ -1,0 +1,38 @@
+.datosSesion {
+    padding: 10px 20px;
+    background-color: #00477C;
+    color:#FFF;
+    font-size: 14px;
+}
+.datosSesion span {
+    color: rgb(67, 196, 191);
+}
+.datosSesion a, .datosSesion a:visited {
+    color:#FFF;
+    text-decoration: none;
+    padding: 0 20px;
+}
+.datosSesion a:hover{
+    text-decoration: underline;
+    color: rgb(67, 196, 191);
+}
+
+.datosSesion a.logout, 
+.datosSesion a.logout:hover, 
+.datosSesion a.logout:visited  {
+    text-decoration: underline;
+    padding: 0px;
+    color:#FFF;
+}
+.datosSesion .divPading div{
+    padding: 3px 0px;
+}
+.datosSesion md-menu-bar button {
+    color: #FFF;
+}
+.datosSesion md-menu-bar.md-default-theme md-menu._md-open > button,
+.datosSesion md-menu-bar md-menu._md-open > button,
+.datosSesion md-menu-bar.md-default-theme md-menu > button:focus,
+.datosSesion md-menu-bar md-menu > button:focus {
+    color: #00477C;
+}

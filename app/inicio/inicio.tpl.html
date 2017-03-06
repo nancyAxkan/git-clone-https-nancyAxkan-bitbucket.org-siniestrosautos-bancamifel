@@ -1,0 +1,33 @@
+<md-progress-linear ng-show="ic.loading" md-mode="indeterminate"></md-progress-linear>
+<div class="mifel_inicio">
+    <div layout="column" layout-align="center center">
+        <div flex>
+            <h1>La protección que necesitas</h1>
+        </div>
+        <span class="divisor"></span>
+        <div flex>
+            <!--h3>Elige el seguro que más se ajuste a tus necesidades.</h3-->
+        </div>
+    </div>
+    <div layout="row" layout-xs="column" layout-align="none stretch">
+        <div flex="10"></div>
+        <div flex layout="column" layout-padding>
+            <div>
+                <a href="javascript:void(0)" ng-click="ic.vida()" class="btn_vida" title="vida"></a>
+            </div>
+            <div hide-xs>
+                <p>Es un seguro de Vida que brinda protección por fallecimiento a corto plazo.</p>
+            </div>
+        </div>
+        <div flex="10"></div>
+        <div flex layout="column" layout-padding>
+            <div>
+                <a href="javascript:void(0)" ng-click="ic.ap()" class="btn_ap" title="accidentes personales"></a>
+            </div>
+            <div hide-xs>
+                <p>Es un seguro accesible que brinda protección por accidentes a corto plazo.</p>
+            </div>            
+        </div>
+        <div flex="10"></div>
+    </div>
+</div>

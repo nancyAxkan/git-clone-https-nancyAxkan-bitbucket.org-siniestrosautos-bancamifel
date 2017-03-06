@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html ng-app="mifel" manifest="manifest.appcache">
+
+<head>
+    <title>Mifel - GNP</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Banca Mifel">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-128.jpg">
+    <!-- Add to home screen for Windows -->
+    <meta name="msapplication-TileImage" content="/assets/icons/icon-128.jpg">
+    <meta name="msapplication-TileColor" content="#00477C">
+    <!-- Add to home screen for Chrome -->
+    <link rel="manifest" href="/manifest.json">
+
+    <style>
+        html,
+        body {
+            background-color: #FFF;
+            font-family: "Helvetica";
+            color: #333;
+        }
+        
+        .barraLogos img {
+            padding: 5px 20px;
+        }
+        
+        .load {
+            width: 100%;
+            min-height: 520px;
+            text-align: center;
+            padding-top: 160px;
+        }
+        
+        .load img {
+            margin: 160px 0px;
+        }
+        
+        footer {
+            text-align: right;
+        }
+        
+        footer p,
+        footer a,
+        footer a:hover,
+        footer a:visited {
+            color: #004681;
+            text-decoration: none;
+        }
+        
+        md-content.md-default-theme,
+        md-content,
+        .md-subheader.md-default-theme,
+        .md-subheader {
+            background-color: #FFF;
+        }
+    </style>
+
+    <link href="assets/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    
+    <!-- include: "type": "css", "basePath": "dist", "files": "app/*.css" -->
+    <link href="app/login/login.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/inicio/inicio.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/vida/vida.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/ap/ap.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/sesion/sesion.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/cotizacion/mis_cotizaciones.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/emisionAP/emisionAp.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/emisionVida/emisionVida.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/caducar/caducar.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+    <link href="app/global.css" rel="stylesheet" type="text/css">
+    <link href="common/rzslider.min.css" rel="stylesheet" type="text/css">
+    <!-- /include -->
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js" defer></script>
+
+    <!-- include: "type": "js", "basePath": "dist", "files": "app/comun.min.js" -->
+    <script src="common/angular-material.min.js" defer></script>
+    <script src="common/angularfire.min.js" defer></script>
+    <script src="common/angular-material-icons.min.js" defer></script>
+    <script src="common/angular-ui-router.min.js" defer></script>
+    <script src="common/jinqjs.js" defer></script>
+    <script src="common/rzslider.min.js" defer></script>
+    <script src="common/json.pruned.js" defer></script>
+    <script src="common/angular-idle.min.js" defer></script>
+    <!-- /include -->
+
+    <!-- include: "type": "js", "basePath": "dist", "files": "app/app.mifel.min.js" -->
+    <script src="app/app.js" defer></script>
+    <script src="app/app.exception.js" defer></script>
+    <script src="app/app.routes.js" defer></script>
+    <script src="app/app.authObject.js" defer></script>
+    <script src="app/app.comunFact.js" defer></script>
+    <script src="app/app.shared.js" defer></script>
+    <script src="app/app.onlineoffline.js" defer></script>
+    <script src="app/inicio/inicio.js" defer></script>
+    <script src="app/login/login.js" defer></script>
+    <script src="app/sesion/sesion.js" defer></script>
+    <script src="app/sesion/sesion.service.js" defer></script>
+    <script src="app/sesiones/sesiones.service.js" defer></script>
+    <script src="app/sesiones/sesiones.controller.js" defer></script>
+    <script src="app/repBateo/repBateo.service.js" defer></script>
+    <script src="app/repBateo/repBateo.controller.js" defer></script>
+    <script src="app/repProduccion/repProduccion.service.js" defer></script>
+    <script src="app/repProduccion/repProduccion.controller.js" defer></script>
+    <script src="app/repCobranza/repCobranza.service.js" defer></script>
+    <script src="app/repCobranza/repCobranza.controller.js" defer></script>
+    <script src="app/repUdi/repUdi.service.js" defer></script>
+    <script src="app/repUdi/repUdi.controller.js" defer></script>
+    <script src="app/vida/vida.js" defer></script>
+    <script src="app/vida/vida.services.js" defer></script>
+    <script src="app/ap/ap.js" defer></script>
+    <script src="app/ap/ap.services.js" defer></script>
+    <script src="app/observaciones/observaciones.service.js" defer></script>
+    <script src="app/sucursales/sucursales.controller.js" defer></script>
+    <script src="app/sucursales/sucursales.service.js" defer></script>
+    <script src="app/zonas/zonas.controller.js" defer></script>
+    <script src="app/zonas/zonas.service.js" defer></script>
+    <script src="app/cotizacion/cotizacion.service.js" defer></script>
+    <script src="app/cotizacion/mis_cotizaciones.controller.js" defer></script>
+    <script src="app/log/log.service.js" defer></script>
+    <script src="app/log/log.controller.js" defer></script>
+    <script src="app/usuarios/usuarios.controller.js" defer></script>
+    <script src="app/usuarios/usuarios.service.js" defer></script>
+    <script src="app/emisionAP/emisionAp.controller.js" defer></script>
+    <script src="app/emisionAP/emisionAp.service.js" defer></script>
+    <script src="app/emisionVida/emisionVida.controller.js" defer></script>
+    <script src="app/emisionVida/emisionVida.service.js" defer></script>
+    <script src="app/productos/productos.controller.js" defer></script>
+    <script src="app/productos/productos.service.js" defer></script>
+    <script src="app/observaciones/observaciones.service.js" defer></script>
+    <script src="app/caducar/caducar.controller.js" defer></script>
+    <script src="app/caducar/caducar.service.js" defer></script>
+    <script src="app/csv/csv.service.js" defer></script>
+    <script src="app/app.directives.js" defer></script>
+    <!-- /include -->
+</head>
+
+<body>
+    <header ng-cloak>
+        <div flex layout="row" layout-align="space-between center" layout-align-xs="center center" class="barraLogos">
+            <a href="#/inicio"><img src='assets/logo_mifel.png' title="logo mifel" /></a>
+            <img src='assets/logo_gnp.png' title="logo gnp" hide-xs/>
+        </div>
+    </header>
+    <div id="load" class="load">
+        <style type='text/css'>
+            @-ms-keyframes uil-ring-anim {
+                0% {
+                    -ms-transform: rotate(0);
+                    -moz-transform: rotate(0);
+                    -webkit-transform: rotate(0);
+                    -o-transform: rotate(0);
+                    transform: rotate(0)
+                }
+                100% {
+                    -ms-transform: rotate(360deg);
+                    -moz-transform: rotate(360deg);
+                    -webkit-transform: rotate(360deg);
+                    -o-transform: rotate(360deg);
+                    transform: rotate(360deg)
+                }
+            }
+            
+            @-moz-keyframes uil-ring-anim {
+                0% {
+                    -ms-transform: rotate(0);
+                    -moz-transform: rotate(0);
+                    -webkit-transform: rotate(0);
+                    -o-transform: rotate(0);
+                    transform: rotate(0)
+                }
+                100% {
+                    -ms-transform: rotate(360deg);
+                    -moz-transform: rotate(360deg);
+                    -webkit-transform: rotate(360deg);
+                    -o-transform: rotate(360deg);
+                    transform: rotate(360deg)
+                }
+            }
+            
+            @-webkit-keyframes uil-ring-anim {
+                0% {
+                    -ms-transform: rotate(0);
+                    -moz-transform: rotate(0);
+                    -webkit-transform: rotate(0);
+                    -o-transform: rotate(0);
+                    transform: rotate(0)
+                }
+                100% {
+                    -ms-transform: rotate(360deg);
+                    -moz-transform: rotate(360deg);
+                    -webkit-transform: rotate(360deg);
+                    -o-transform: rotate(360deg);
+                    transform: rotate(360deg)
+                }
+            }
+            
+            @-o-keyframes uil-ring-anim {
+                0% {
+                    -ms-transform: rotate(0);
+                    -moz-transform: rotate(0);
+                    -webkit-transform: rotate(0);
+                    -o-transform: rotate(0);
+                    transform: rotate(0)
+                }
+                100% {
+                    -ms-transform: rotate(360deg);
+                    -moz-transform: rotate(360deg);
+                    -webkit-transform: rotate(360deg);
+                    -o-transform: rotate(360deg);
+                    transform: rotate(360deg)
+                }
+            }
+            
+            @keyframes uil-ring-anim {
+                0% {
+                    -ms-transform: rotate(0);
+                    -moz-transform: rotate(0);
+                    -webkit-transform: rotate(0);
+                    -o-transform: rotate(0);
+                    transform: rotate(0)
+                }
+                100% {
+                    -ms-transform: rotate(360deg);
+                    -moz-transform: rotate(360deg);
+                    -webkit-transform: rotate(360deg);
+                    -o-transform: rotate(360deg);
+                    transform: rotate(360deg)
+                }
+            }
+            
+            .uil-ring-css {
+                background: 0 0;
+                position: relative;
+                width: 260px;
+                height: 200px;
+                margin: 0 auto
+            }
+            
+            .uil-ring-css>div {
+                text-align: center;
+                display: block;
+                width: 260px;
+                height: 260px;
+                top: 20px;
+                left: 20px;
+                border-radius: 130px;
+                box-shadow: 0 6px 0 0 #59ebff;
+                -ms-animation: uil-ring-anim 1s linear infinite;
+                -moz-animation: uil-ring-anim 1s linear infinite;
+                -webkit-animation: uil-ring-anim 1s linear infinite;
+                -o-animation: uil-ring-anim 1s linear infinite;
+                animation: uil-ring-anim 1s linear infinite
+            }
+        </style>
+        <div class='uil-ring-css' style='transform:scale(0.6);'>
+            <div></div>
+        </div>
+    </div>
+    <div layout="column" ng-cloak>
+        <div ng-controller="sesionCtrl as sm" ng-show="sm.menuUsuario">
+            <md-sidenav class="md-sidenav-left md-whiteframe-4dp" md-component-id="menuBar" hide-md hide-gt hide-gt-md>
+                <md-toolbar>
+                    <h1 class="md-toolbar-tools">{{sm.usuario.tipo}}</h1>
+                </md-toolbar>
+                <md-content>
+                    <md-subheader class="md-no-sticky"><b>Bienvenido</b> {{sm.usuario.nombre}}</md-subheader>
+                    <md-divider></md-divider>
+                    <md-list>
+                        <md-list-item ng-show="sm.menuN3" ng-click="sm.go('mis-operaciones')">
+                            <p>Mis operaciones</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN3" ng-click="sm.go('vida')">
+                            <p>Vida</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN3" ng-click="sm.go('accidentes-personales')">
+                            <p>Accidentes Personales</p>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item ng-show="sm.menuN1" ng-click="sm.go('sesiones')">
+                            <p>Reporte de sesiones</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN1" ng-click="sm.go('repproduccion')">
+                            <p>Reporte de producci&oacute;n</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN0" ng-click="sm.go('repcobranza')">
+                            <p>Reporte de cobranza</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN0" ng-click="sm.go('repudi')">
+                            <p>Reporte de UDI</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN1" ng-click="sm.go('repbateo')">
+                            <p>Reporte de bateo</p>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item ng-show="sm.menuN1" ng-click="sm.go('sucursales')">
+                            <p>Sucursales</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN1" ng-click="sm.go('zonas')">
+                            <p>Zonas</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN2" ng-click="sm.go('usuarios')">
+                            <p>Usuarios</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN0" ng-click="sm.go('productos')">
+                            <p>Productos</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN0" ng-click="sm.go('caducar')">
+                            <p>Caducar</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN0" ng-click="sm.go('log')">
+                            <p>Logs</p>
+                        </md-list-item>
+                        <md-list-item ng-show="sm.menuN0" ng-click="sm.go('sesiones')">
+                            <p>Sesiones</p>
+                        </md-list-item>
+                    </md-list>
+                    <md-divider></md-divider>
+                    <md-button class="md-raised md-warn" layout-fill ng-click="sm.logout()">Cerrar sesión</md-button>
+                </md-content>
+            </md-sidenav>
+            <md-content hide-md hide-lg hide-xl>
+                <md-toolbar md-scroll-shrink="">
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" aria-label="Settings">
+                            <ng-md-icon icon="menu" ng-click="sm.openBar()" style="fill:#FFF"></ng-md-icon>
+                        </md-button>
+                        <span>{{sm.pagina}}</span>
+                    </div>
+                </md-toolbar>
+            </md-content>
+            <div flex hide-xs hide-sm layout="row" layout-align="center end" class="datosSesion">
+                <div flex layout="row" layout-align="start stretch" class="divPading">
+                    <md-menu-bar>
+                        <md-menu>
+                            <button ng-show="sm.menuN2" md-theme="md-accent" ng-click="$mdOpenMenu()">Administración</button>
+                            <md-menu-content>
+                                <md-menu-item ng-show="sm.menuN1">
+                                    <md-button class="md-primary" ng-click="sm.go('sucursales')">Sucursales</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN1">
+                                    <md-button class="md-primary" ng-click="sm.go('zonas')">Zonas</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN2">
+                                    <md-button class="md-primary" ng-click="sm.go('usuarios')">Usuarios</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN0">
+                                    <md-button class="md-primary" ng-click="sm.go('productos')">Productos</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN0">
+                                    <md-button class="md-primary" ng-click="sm.go('caducar')">Caducar</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN0">
+                                    <md-button class="md-primary" ng-click="sm.go('log')">Logs</md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-show="sm.menuN1" md-theme="md-accent" ng-click="$mdOpenMenu()">Reportes</button>
+                            <md-menu-content>
+                                <md-menu-item ng-show="sm.menuN1">
+                                    <md-button class="md-primary" ng-click="sm.go('sesiones')">Sesiones</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN1">
+                                    <md-button class="md-primary" ng-click="sm.go('repproduccion')">Producci&oacute;n</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN0">
+                                    <md-button class="md-primary" ng-click="sm.go('repcobranza')">Cobranza</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN0">
+                                    <md-button class="md-primary" ng-click="sm.go('repudi')">UDI</md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-show="sm.menuN1">
+                                    <md-button class="md-primary" ng-click="sm.go('repbateo')">Bateo</md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-show="sm.menuN3" class="md-primary" ng-click="sm.go('mis-operaciones')">Mis operaciones</button>
+                            <md-menu-content></md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-show="sm.menuN3" class="md-primary" ng-click="sm.go('vida')">Vida</button>
+                            <md-menu-content></md-menu-content>
+                        </md-menu>
+                        <md-menu>
+                            <button ng-show="sm.menuN3" class="md-primary" ng-click="sm.go('accidentes-personales')">Accidentes Personales</button>
+                            <md-menu-content></md-menu-content>
+                        </md-menu>
+                    </md-menu-bar>
+                </div>
+                <div layout="column" style="width:300px" layout-align="center end" layout-fill style="min-width: 300px" class="divPading">
+                    <div>
+                        <label><span><b>Bienvenido</b></span> <b>{{sm.usuario.nombre}}</b></label>
+                    </div>
+                    <div flex layout="row">
+                        <label>{{sm.usuario.ultimaSesion}}</label>
+                    </div>
+                </div>
+                <div layout="column" style="width:130px" layout-align="center center" layout-fill style="min-width: 130px" class="divPading">
+                    <div>
+                        <label><b>{{sm.usuario.tipoMin}}</b></label>
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)" ng-click="sm.logout()" class="logout">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div flex ui-view="principal" style="overflow-y: auto;"></div>
+        <md-divider></md-divider>
+    </div>
+    <footer>
+        <div flex layout="row" layout-align="end stretch" layout-padding>
+            <p>&#9400; 2016 Todos los Derechos Reservados de Grupo Nacional Provincial |
+                <a href="https://www.gnp.com.mx/wps/portal/portalesgnp/anexos/aviso-privacidad" target="_blank">Aviso de privacidad</a></p>
+        </div>
+    </footer>
+</body>
+
+</html>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-87287103-1', 'auto', {'allowLinker': true});
+  ga('require', 'linker');
+  ga('linker:autoLink', ['uat.banseg.gnp.com.mx', 'qa.banseg.gnp.com.mx', 'sit.banseg.gnp.com.mx'] );
+  ga('send', 'pageview');
+
+</script>

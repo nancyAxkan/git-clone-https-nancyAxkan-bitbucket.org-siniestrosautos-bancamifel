@@ -1,0 +1,89 @@
+<md-progress-linear ng-show="vm.loading" md-mode="indeterminate"></md-progress-linear>
+<div style="max-width:880px">
+    <p style="padding:10px">Busqueda y Edición de Sucursales</p>
+    <div layout layout-xs="column" layout-align="start start" layout-padding>
+        <md-input-container>
+            <md-icon aria-label="buscar" class="material-icons">search</md-icon>
+            <label>Descripci&oacute;n</label>
+            <input ng-model="vm.filtroDescripcion">
+        </md-input-container>
+        <md-input-container>
+            <label>Zona</label>
+            <md-select ng-model="vm.filtroZona">
+                <md-option ng-repeat="zona in vm.zonas" ng-value="zona.$id">
+                    {{zona.descripcion}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container>
+            <md-button ng-click="vm.filtrar()">Aplicar filtro</md-button>
+            <md-button ng-click="vm.limpiarFiltro()">Limpiar filtro</md-button>
+            <md-button ng-click="vm.showAdd()" class="md-raised md-primary" ng-disabled="!vm.online">Agregar sucursal</md-button>
+        </md-input-container>
+    </div>
+    <md-content id="catalogoSucursal">
+        <form name="nuevaSucursal" novalidate ng-submit="nuevaSucursal.$valid && vm.addSucursal()">
+            <md-card ng-show="vm.add">
+                <md-card-title>
+                    <md-card-title-text>
+                        <md-input-container>
+                            <label>Zona</label>
+                            <md-select required name="zId" ng-model="vm.zId">
+                                <md-option ng-repeat="zona in vm.zonas | filter: { $id: '!default' }" ng-value="zona.$id">
+                                    {{zona.descripcion}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="nuevaSucursal.zId.$error">
+                                <div ng-message="required">Campo obligatorio.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Descripci&oacute;n</label>
+                            <input required name="descripcion" ng-model="vm.descripcion" capitalize catalogovalido catalogo="sucursal" zona="{{vm.zId}}">
+                            <div ng-messages="nuevaSucursal.descripcion.$error">
+                                <div ng-message="required">Campo obligatorio.</div>
+                                <div ng-message="catalogovalido">Ya existe una sucursal con esta descripci&oacute;n.</div>
+                            </div>
+                        </md-input-container>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="start center">
+                    <md-button class="md-raised md-primary" ng-click="vm.addSucursal()" ng-disabled="!vm.online">Guardar</md-button>
+                    <md-button class="md-raised md-primary" ng-click="vm.cancelarAdd()">Cancelar</md-button>
+                </md-card-actions>
+            </md-card>
+        </form>
+        <md-card ng-repeat="sucursal in vm.sucursales | filter: { $id: '!default' } | orderBy: 'descripcion'">
+            <ng-form name="editarSucursal" novalidate>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span ng-show="!sucursal.edit" class="md-subhead">Zona: {{sucursal.descripcionZona}}</span>
+                        <md-input-container ng-show="sucursal.edit">
+                            <label>Zona</label>
+                            <md-select ng-model="sucursal.zId">
+                                <md-option ng-repeat="zona in vm.zonas | filter: { $id: '!default' }" ng-value="zona.$id">
+                                    {{zona.descripcion}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <span ng-show="!sucursal.edit" class="md-headline">{{sucursal.descripcion}}</span>
+                        <md-input-container ng-show="sucursal.edit">
+                            <label>Descripci&oacute;n</label>
+                            <input name="descripcion" ng-model="vm.descripcion" capitalize required catalogovalido catalogo="sucursal" id="{{sucursal.$id}}" zona="{{sucursal.zId}}">
+                            <div ng-messages="editarSucursal.descripcion.$error">
+                                <div ng-message="required">Campo obligatorio.</div>
+                                <div ng-message="catalogovalido">Ya existe una sucursal con esta descripci&oacute;n.</div>
+                            </div>
+                        </md-input-container>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button ng-show="!sucursal.edit" ng-click="vm.deleteSucursal(sucursal)" ng-disabled="!vm.online" class="md-raised md-primary">Borrar</md-button>
+                    <md-button ng-show="!sucursal.edit" ng-click="vm.edit(sucursal)" ng-disabled="!vm.online" class="md-raised md-primary">Editar</md-button>
+                    <md-button ng-show="sucursal.edit" ng-click="vm.updateSucursal(sucursal)" ng-disabled="(editarSucursal.$invalid && !vm.online) || (!vm.online)" class="md-raised md-primary">Guardar</md-button>
+                    <md-button ng-show="sucursal.edit" ng-click="vm.cancelUpdateSucursal(sucursal)" class="md-raised md-primary">Cancelar</md-button>
+                </md-card-actions>
+            </ng-form>
+        </md-card>
+    </md-content>
+</div>

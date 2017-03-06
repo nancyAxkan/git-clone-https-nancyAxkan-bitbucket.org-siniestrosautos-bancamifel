@@ -1,0 +1,28 @@
+.mis_cotizaciones .nav-active {
+    background-color: #00477C;
+    color: #FFF;
+}
+.mis_cotizaciones .nav-active md-icon {
+    color: rgb(88,250,208);
+}
+.mis_cotizaciones md-list-item.md-2-line.nav-active .md-list-item-text p, 
+.mis_cotizaciones md-list-item.md-2-line.nav-active > .md-no-style .md-list-item-text p{
+    color: #FFF;
+}
+.mis_cotizaciones .campos p, .mis_cotizaciones .campos p span {
+    font-size:12px !important;
+    font-weight: lighter;
+    margin: 0px;
+}
+.mis_cotizaciones .campos p {
+    font-weight: bold;
+    /*font-stretch: condensed;*/
+}
+#toaster {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 400px;
+    height: 65px;
+    z-index: 10000;
+}

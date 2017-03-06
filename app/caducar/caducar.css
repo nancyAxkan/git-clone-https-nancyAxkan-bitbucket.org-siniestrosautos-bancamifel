@@ -1,0 +1,30 @@
+.mifel_caducar h3 {
+    color: #18B4B0;
+    font-weight: lighter;
+    text-align: left;
+    font-size: 20px;
+}
+.mifel_caducar h2 {
+    color: #3B3B3B;
+    font-weight: lighter;
+    text-align: left;
+    font-size: 14px;
+}
+.mifel_caducar .divisor {
+    border-top: 5px solid #43C2BE;
+    width: 95px;
+}
+.mifel_caducar ul li {
+    list-style: none;
+}
+.mifel_caducar .campos span {
+    font-size:12px;
+    font-weight: lighter;
+    margin: 0px 10px;
+}
+.mifel_caducar .error {
+    color: #F60000;
+}
+.mifel_caducar .warning {
+    color: #F6AC00;
+}

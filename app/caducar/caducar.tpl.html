@@ -1,0 +1,25 @@
+<md-progress-linear ng-show="cd.loading" md-mode="indeterminate"></md-progress-linear>
+<div class="mifel_caducar">
+    <div layout="column" layout-align="center start" layout-padding>
+        <div flex>
+            <h3>Este proceso caducará todas las cotizaciones realizadas 6 meses atrás.</h3>
+            <h2><md-icon class="material-icons error">error</md-icon> Cualquier cotización realizada antes del {{cd.getDate()}} se caducará.</h2>
+        </div>
+    </div>
+    <md-content>
+        <md-subheader class="md-no-sticky">
+            <md-icon class="material-icons warning">warning</md-icon>
+            <b>{{cd.total}}</b> Cotizaciones encontradas a caducar
+        </md-subheader>
+        <ul ng-repeat="cot in cd.cotizaciones" class="campos">
+            <li>
+                <md-icon class="material-icons">event_busy</md-icon> 
+                <span>Fecha: {{cd.formatDate(cot.timestamp)}}</span>
+                <span>Ejecutivo: {{cot.nombreEjecutivo}}</span>
+            </li>
+        </ul>
+        <md-input-container>
+            <md-button ng-disabled="cd.total == 0 || !cd.online" class="md-raised md-primary" ng-click="cd.caducar()">Caducar las cotizaciones</md-button>
+        </md-input-container>
+    </md-content>
+</div>

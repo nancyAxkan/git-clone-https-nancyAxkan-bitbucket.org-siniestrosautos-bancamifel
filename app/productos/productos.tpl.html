@@ -1,0 +1,646 @@
+<md-progress-linear ng-show="vm.loading" md-mode="indeterminate"></md-progress-linear>
+<div>
+    <p style="padding:10px">Busqueda y Edición de Productos</p>
+    <div layout layout-xs="column" layout-align="start start" layout-padding>
+        <md-input-container>
+            <md-icon aria-label="buscar" class="material-icons">search</md-icon>
+            <label>Descripci&oacute;n</label>
+            <input ng-model="vm.filtroDescripcion">
+        </md-input-container>
+        <md-input-container>
+            <md-button ng-click="vm.filtrar()">Aplicar filtro</md-button>
+            <md-button ng-click="vm.limpiarFiltro()">Limpiar filtro</md-button>
+        </md-input-container>
+        <md-input-container>
+            <md-button class="md-raised md-primary" ng-click="vm.showAddAP()" ng-disabled="!vm.online">Agregar producto AP</md-button>
+            <md-button class="md-raised md-primary" ng-click="vm.showAddVida()" ng-disabled="!vm.online">Agregar producto Vida</md-button>
+        </md-input-container>
+    </div>
+</div>
+
+<md-content id="catalogoProductos">
+    <ng-form name="nuevoProductoAP" novalidate>
+        <md-card ng-show="vm.addAP">
+            <md-card-title>
+                <md-card-title-text>
+                    <md-input-container>
+                        <label>Producto</label>
+                        <input required name="descripcion" capitalize ng-model="vm.descripcion">
+                        <div ng-messages="nuevoProductoAP.descripcion.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Suma asegurada</label>
+                        <input required ng-pattern="/^[0-9]{1,9}$/" name="suma" ng-model="vm.suma">
+                        <div ng-messages="nuevoProductoAP.suma.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container ng-show="vm.tipo == 'AP'">
+                        <label>Deducible</label>
+                        <input ng-required="vm.tipo == 'AP'" ng-pattern="/^[0-9]{1,9}$/" name="deducible" ng-model="vm.deducible">
+                        <div ng-messages="nuevoProductoAP.deducible.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container ng-show="vm.tipo == 'AP'">
+                        <label>Invalidez</label>
+                        <input ng-required="vm.tipo == 'AP'" ng-pattern="/^[0-9]{1,9}$/" name="invalidez" ng-model="vm.invalidez">
+                        <div ng-messages="nuevoProductoAP.invalidez.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container ng-show="vm.tipo == 'AP'">
+                        <label>Muerte accidental</label>
+                        <input ng-required="vm.tipo == 'AP'" ng-pattern="/^[0-9]{1,9}$/" name="muerte" ng-model="vm.muerte">
+                        <div ng-messages="nuevoProductoAP.muerte.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container ng-show="vm.tipo == 'AP'">
+                        <label>Perdidas de organos</label>
+                        <input ng-required="vm.tipo == 'AP'" ng-pattern="/^[0-9]{1,9}$/" name="perdidas" ng-model="vm.perdidas">
+                        <div ng-messages="nuevoProductoAP.perdidas.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container ng-show="vm.tipo == 'AP'">
+                        <label>Reembolso de accidentes</label>
+                        <input ng-required="vm.tipo == 'AP'" ng-pattern="/^[0-9]{1,9}$/" name="accidentes" ng-model="vm.accidentes">
+                        <div ng-messages="nuevoProductoAP.accidentes.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container ng-show="vm.tipo == 'AP'">
+                        <label>Reembolso de gastos funerarios</label>
+                        <input ng-required="vm.tipo == 'AP'" ng-pattern="/^[0-9]{1,9}$/" name="funerarios" ng-model="vm.funerarios">
+                        <div ng-messages="nuevoProductoAP.funerarios.$error">
+                            <div ng-message="required">Campo obligatorio.</div>
+                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                        </div>
+                    </md-input-container>
+                    <div ng-repeat="prima in vm.primas | orderBy: 'edadIni'" layout>
+                        <div flex layout ng-hide="prima.edit">
+                            <div>
+                                <md-button ng-click="vm.deleteNewPrima(prima)" class="md-fab md-mini">
+                                    <ng-md-icon icon="remove" size="30" style="fill: #ffffff"></ng-md-icon>
+                                </md-button>
+                            </div>
+                            <div flex="70" hide show-gt-sm>
+                                <rzslider rz-slider-model="prima.edadIni" ng-attr-rz-slider-high="prima.edadFin" rz-slider-options="vm.sliderOptions"></rzslider>
+                            </div>
+                            <div flex hide-gt-sm layout layout-wrap>
+                                <div flex="50" style="text-align: center"><strong>Edad Inicial</strong><br />{{prima.edadIni}}</div>
+                                <div flex="50" style="text-align: center"><strong>Edad Final</strong><br />{{prima.edadFin}}</div>
+                                <div ng-show="vm.tipo == 'AP'" flex="50" style="text-align: center; margin-top:10px;">Hombre<br />{{prima.h | currency: "$ ": 2}}</div>
+                                <div ng-show="vm.tipo == 'AP'" flex="50" style="text-align: center; margin-top:10px;">Mujer<br />{{prima.m | currency: "$ ": 2}}</div>
+                                <div ng-show="vm.tipo == 'VIDA'" flex="50" style="text-align: center; margin-top:10px;"><strong>DIBA</strong><br />{{prima.diba}}</div>
+                                <div ng-show="vm.tipo == 'VIDA'" flex="50" style="text-align: center; margin-top:10px;"><strong>Fallecimiento</strong><br />{{prima.fallecimiento}}</div>
+                                <div ng-show="vm.tipo == 'VIDA'" flex="50" style="text-align: center; margin-top:10px;"><strong>IMA</strong><br />{{prima.ima}}</div>
+                                <div ng-show="vm.tipo == 'VIDA'" flex="50" style="text-align: center; margin-top:10px;"><strong>ISE</strong><br />{{prima.ise}}</div>
+                                <hr flex />
+                            </div>
+                            <div ng-show="vm.tipo == 'AP'" style="padding: 3px 0px 0px 15px;" ng-show="!usuario.edit" layout hide show-gt-sm>
+                                <div><label class="rz-bubble">Hombre: </label><br/><label class="rz-bubble">Mujer: </label></div>
+                                <div><label class="rz-bubble">{{prima.h | currency: "$ ": 2}}</label><br/><label class="rz-bubble">{{prima.m | currency: "$ ": 2}}</label></div>
+                            </div>
+                            <div ng-show="vm.tipo == 'VIDA'" style="padding: 3px 0px 0px 15px;" ng-show="!prima.edit" layout hide show-gt-sm>
+                                <div><label class="rz-bubble">DIBA: </label><br/><label class="rz-bubble">{{prima.diba}}</label></div>
+                                <div><label class="rz-bubble">Fallecimiento: </label><br/><label class="rz-bubble">{{prima.fallecimiento}}</label></div>
+                                <div><label class="rz-bubble">IMA: </label><br/><label class="rz-bubble">{{prima.ima}}</label></div>
+                                <div><label class="rz-bubble">ISE: </label><br/><label class="rz-bubble">{{prima.ise}}</label></div>
+                                <div>
+                                    <md-button ng-click="vm.editPrima(prima)" ng-disabled="!vm.online" class="md-fab md-mini md-primary">
+                                        <ng-md-icon icon="edit" size="30" style="fill: #ffffff"></ng-md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div flex layout ng-show="prima.edit">
+                                <ng-form name="editNuevaPrima">
+                                    <md-input-container>
+                                        <label>Edad inicial</label>
+                                        <input ng-required="prima.edit" ng-pattern="/^[0-9]{1,9}$/" name="edadIni" ng-model="prima.edadIni">
+                                        <div ng-messages="editNuevaPrima.edadIni.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Edad final</label>
+                                        <input ng-pattern="/^[0-9]{1,9}$/" name="edadFin" ng-model="prima.edadFin">
+                                        <div ng-messages="editNuevaPrima.primaMasculina.$error">
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container ng-show="vm.tipo == 'AP'">
+                                        <label>Prima masculina</label>
+                                        <input ng-required="vm.tipo == 'AP' && prima.edit" ng-pattern="/^\d+(?:\.\d+)?$/" name="primaMasculina" ng-model="prima.primaM">
+                                        <div ng-messages="editNuevaPrima.primaMasculina.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container ng-show="vm.tipo == 'AP'">
+                                        <label>Prima femenina</label>
+                                        <input ng-required="vm.tipo == 'AP' && prima.edit" ng-pattern="/^\d+(?:\.\d+)?$/" name="primaFemenina" ng-model="prima.primaF">
+                                        <div ng-messages="editNuevaPrima.primaFemenina.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                        <label>DIBA</label>
+                                        <input ng-required="vm.tipo == 'VIDA' && prima.edit" ng-pattern="/^\d+(?:\.\d+)?$/" name="diba" ng-model="prima.diba">
+                                        <div ng-messages="editNuevaPrima.diba.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                        <label>Fallecimiento</label>
+                                        <input ng-required="vm.tipo == 'VIDA' && prima.edit" ng-pattern="/^\d+(?:\.\d+)?$/" name="fallecimiento" ng-model="prima.fallecimiento">
+                                        <div ng-messages="editNuevaPrima.fallecimiento.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                        <label>IMA</label>
+                                        <input ng-required="vm.tipo == 'VIDA' && prima.edit" ng-pattern="/^\d+(?:\.\d+)?$/" name="ima" ng-model="prima.ima">
+                                        <div ng-messages="editNuevaPrima.ima.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                        <label>ISE</label>
+                                        <input ng-required="vm.tipo == 'VIDA' && prima.edit" ng-pattern="/^\d+(?:\.\d+)?$/" name="ise" ng-model="prima.ise">
+                                        <div ng-messages="editNuevaPrima.ise.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-button class="md-raised md-primary" ng-disabled="(editNuevaPrima.$invalid && !vm.online) || (!vm.online)" ng-click="vm.updatePrima(prima)">Actualizar prima</md-button>
+                                    <md-button class="md-raised md-primary" ng-click="vm.hideUpdatePrima(prima)">Cancelar</md-button>
+                                </ng-form>
+                            </div>
+                        </div>
+                        <div ng-show="vm.prima">
+                            <ng-form name="nuevaPrima" novalidate>
+                                <md-input-container>
+                                    <label>Edad inicial</label>
+                                    <input ng-required="vm.prima" ng-pattern="/^[0-9]{1,9}$/" name="edadIni" ng-model="vm.edadIni">
+                                    <div ng-messages="nuevaPrima.edadIni.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Edad final</label>
+                                    <input name="edadFin" ng-pattern="/^[0-9]{1,9}$/" ng-model="vm.edadFin">
+                                    <div ng-messages="nuevaPrima.edadFin.$error">
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container ng-show="vm.tipo == 'AP'">
+                                    <label>Prima masculina</label>
+                                    <input ng-required="vm.prima && vm.tipo == 'AP'" ng-pattern="/^\d+(?:\.\d+)?$/" name="primaMasculina" ng-model="vm.primaMasculina">
+                                    <div ng-messages="nuevaPrima.primaMasculina.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container ng-show="vm.tipo == 'AP'">
+                                    <label>Prima femenina</label>
+                                    <input ng-required="vm.prima && vm.tipo == 'AP'" ng-pattern="/^\d+(?:\.\d+)?$/" name="primaFemenina" ng-model="vm.primaFemenina">
+                                    <div ng-messages="nuevaPrima.primaFemenina.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                    <label>DIBA</label>
+                                    <input ng-required="vm.prima && vm.tipo == 'VIDA'" ng-pattern="/^\d+(?:\.\d+)?$/" name="diba" ng-model="vm.diba">
+                                    <div ng-messages="nuevaPrima.diba.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                    <label>Fallecimiento</label>
+                                    <input ng-required="vm.prima && vm.tipo == 'VIDA'" ng-pattern="/^\d+(?:\.\d+)?$/" name="fallecimiento" ng-model="vm.fallecimiento">
+                                    <div ng-messages="nuevaPrima.fallecimiento.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                    <label>IMA</label>
+                                    <input ng-required="vm.prima && vm.tipo == 'VIDA'" ng-pattern="/^\d+(?:\.\d+)?$/" name="ima" ng-model="vm.ima">
+                                    <div ng-messages="nuevaPrima.ima.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container ng-show="vm.tipo == 'VIDA'">
+                                    <label>ISE</label>
+                                    <input ng-required="vm.prima && vm.tipo == 'VIDA'" ng-pattern="/^\d+(?:\.\d+)?$/" name="ise" ng-model="vm.ise">
+                                    <div ng-messages="nuevaPrima.ise.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                                <md-button class="md-raised md-primary" ng-disabled="(nuevaPrima.$invalid && !vm.online) || (!vm.online)" ng-click="vm.addPrima()">Guardar prima</md-button>
+                                <md-button class="md-raised md-primary" ng-click="vm.hidePrima()">Cancelar</md-button>
+                            </ng-form>
+                        </div>
+                        <div>
+                            <md-button class="md-raised md-primary" ng-show="!vm.prima" ng-click="vm.showPrima()" ng-disabled="!vm.online">Agregar prima</md-button>
+                        </div>
+                    </div>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button class="md-raised md-primary" ng-disabled="(nuevoProductoAP.$invalid && !vm.online) || (!vm.online)" ng-click="vm.addProducto()">Guardar</md-button>
+                <md-button class="md-raised md-primary" ng-click="vm.cancelarAddAP()">Cancelar</md-button>
+            </md-card-actions>
+        </md-card>
+    </ng-form>
+    <div flex>
+        <div flex>
+            <md-card ng-repeat="producto in vm.productos | filter: { tipo: 'AP' } | orderBy: vm.numeroSuma">
+                <ng-form name="editarProductoAP" novalidate>
+                    <md-card-title>
+                        <md-card-title-text layout="column">
+                            <div>
+                                <span ng-show="!producto.edit" class="md-headline">{{producto.descripcion}}</span>
+                                <md-input-container ng-show="producto.edit">
+                                    <label>Descripci&oacute;n</label>
+                                    <input name="descripcion" ng-model="vm.descripcion" capitalize required md-maxlengt="75">
+                                    <div ng-messages="editarProductoAP.descripcion.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout>
+                                <span ng-show="!producto.edit" class="md-subhead">{{producto.suma_asegurada | currency: "$ ": 2}}</span>
+                                <md-input-container ng-show="producto.edit">
+                                    <label>Suma asegurada</label>
+                                    <input name="suma" required ng-model="vm.suma" ng-pattern="/^[0-9]{1,9}$/">
+                                    <div ng-messages="editarProductoAP.suma.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <md-input-container ng-show="producto.edit">
+                                <label>Deducible</label>
+                                <input required name="deducible" ng-model="producto.deducible" ng-pattern="/^[0-9]{1,9}$/">
+                                <div ng-messages="editarProductoAP.deducible.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container ng-show="producto.edit">
+                                <label>Invalidez</label>
+                                <input required name="invalidez" ng-model="producto.invalidez" ng-pattern="/^[0-9]{1,9}$/">
+                                <div ng-messages="editarProductoAP.invalidez.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container ng-show="producto.edit">
+                                <label>Muerte accidental</label>
+                                <input required name="muerte" ng-model="producto.muerte_acc" ng-pattern="/^[0-9]{1,9}$/">
+                                <div ng-messages="editarProductoAP.muerte.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container ng-show="producto.edit">
+                                <label>Perdidas de organos</label>
+                                <input required name="perdidas" ng-model="producto.perdidas_org" ng-pattern="/^[0-9]{1,9}$/">
+                                <div ng-messages="editarProductoAP.perdidas.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container ng-show="producto.edit">
+                                <label>Reembolso de accidentes</label>
+                                <input required name="accidentes" ng-model="producto.reembolso_acc" ng-pattern="/^[0-9]{1,9}$/">
+                                <div ng-messages="editarProductoAP.accidentes.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container ng-show="producto.edit">
+                                <label>Reembolso de gastos funerarios</label>
+                                <input required name="funerarios" ng-model="producto.reembolso_fun" ng-pattern="/^[0-9]{1,9}$/">
+                                <div ng-messages="editarProductoAP.funerarios.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                </div>
+                            </md-input-container>
+                            <div ng-show="producto.edit" ng-repeat="prima in producto.primas | orderBy: 'edadIni'" layout>
+                                <div flex layout ng-hide="prima.edit">
+                                    <div>
+                                        <md-button ng-click="vm.deletePrima(prima)" class="md-fab md-mini" aria-label="Borrar prima">
+                                            <ng-md-icon icon="remove" size="30" style="fill: #ffffff"></ng-md-icon>
+                                        </md-button>
+                                    </div>
+                                    <div flex="70" hide show-gt-sm>
+                                        <rzslider rz-slider-model="prima.edadIni" ng-attr-rz-slider-high="prima.edadFin" rz-slider-options="vm.sliderOptions"></rzslider>
+                                    </div>
+                                    <div flex hide-gt-sm layout layout-wrap>
+                                        <div flex="50" style="text-align: center"><strong>Edad Inicial</strong><br />{{prima.edadIni}}</div>
+                                        <div flex="50" style="text-align: center"><strong>Edad Final</strong><br />{{prima.edadFin}}</div>
+                                        <div flex="50" style="text-align: center; margin-top:10px;"><strong>Hombre</strong><br />{{prima.h | currency: "$ ": 2}}</div>
+                                        <div flex="50" style="text-align: center; margin-top:10px;"><strong>Mujer</strong><br />{{prima.m | currency: "$ ": 2}}</div>
+                                        <hr flex />
+                                    </div>
+                                    <div style="padding: 3px 0px 0px 15px;" ng-show="!prima.edit" layout hide show-gt-sm>
+                                        <div><label class="rz-bubble">Hombre: </label><br/><label class="rz-bubble">Mujer: </label></div>
+                                        <div><label class="rz-bubble">{{prima.h | currency: "$ ": 2}}</label><br/><label class="rz-bubble">{{prima.m | currency: "$ ": 2}}</label></div>
+                                    </div>
+                                    <div>
+                                        <md-button ng-click="vm.editPrima(prima)" ng-disabled="!vm.online" class="md-fab md-mini md-primary" aria-label="Editar prima">
+                                            <ng-md-icon icon="edit" size="30" style="fill: #ffffff"></ng-md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                                <div flex layout ng-show="prima.edit">
+                                    <ng-form name="editarPrimaProductoAP" novalidate>
+                                        <md-input-container>
+                                            <label>Edad inicial</label>
+                                            <input required name="edadIni" ng-model="prima.edadIni" ng-pattern="/^[0-9]{1,9}$/">
+                                            <div ng-messages="editarPrimaProductoAP.edadIni.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>Edad final</label>
+                                            <input name="edadFin" ng-model="prima.edadFin" ng-pattern="/^[0-9]{1,9}$/">
+                                            <div ng-messages="editarPrimaProductoAP.edadFin.$error">
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>Prima masculina</label>
+                                            <input required name="primaMasculina" ng-model="prima.h" ng-pattern="/^\d+(?:\.\d+)?$/">
+                                            <div ng-messages="editarPrimaProductoAP.primaMasculina.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>Prima femenina</label>
+                                            <input required name="primaFemenina" ng-model="prima.m" ng-pattern="/^\d+(?:\.\d+)?$/">
+                                            <div ng-messages="editarPrimaProductoAP.primaFemenina.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-button class="md-raised md-primary" ng-click="vm.updatePrima(prima)" ng-disabled="!vm.online || editarPrimaProductoAP.$invalid" aria-label="Actualizar prima">Actualizar prima</md-button>
+                                        <md-button class="md-raised md-primary" ng-click="vm.hideUpdatePrima(prima)" aria-label="Cancelar">Cancelar</md-button>
+                                    </ng-form>
+                                </div>
+                            </div>
+                            <div ng-show="producto.prima">
+                                <ng-form name="editarNuevaPrimaProductoAP" novalidate>
+                                    <md-input-container>
+                                        <label>Edad inicial</label>
+                                        <input name="edadIni" ng-model="vm.edadIni" ng-pattern="/^[0-9]{1,9}$/" ng-required="producto.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoAP.edadIni.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Edad final</label>
+                                        <input name="edadFin" ng-model="vm.edadFin" ng-pattern="/^[0-9]{1,9}$/">
+                                        <div ng-messages="editarNuevaPrimaProductoAP.edadFin.$error">
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Prima masculina</label>
+                                        <input name="primaMasculina" ng-model="vm.h" ng-pattern="/^\d+(?:\.\d+)?$/" ng-required="producto.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoAP.primaMasculina.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Prima femenina</label>
+                                        <input name="primaFemenina" ng-model="vm.m" ng-pattern="/^\d+(?:\.\d+)?$/" ng-required="producto.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoAP.primaFemenina.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-button class="md-raised md-primary" ng-click="vm.addPrimaProducto(producto)" ng-disabled="!vm.online || editarNuevaPrimaProductoAP.$invalid" aria-label="Guardar prima">Guardar prima</md-button>
+                                    <md-button class="md-raised md-primary" ng-click="vm.hidePrimaProducto(producto)" aria-label="Cancelar">Cancelar</md-button>
+                                </ng-form>
+                            </div>
+                            <div>
+                                <md-button class="md-raised md-primary" ng-show="producto.edit" ng-click="vm.showPrimaProducto(producto)" ng-disabled="!vm.online" aria-label="Agregar prima">Agregar prima</md-button>
+                            </div>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-raised md-primary" ng-show="!producto.edit" ng-disabled="!vm.online" ng-click="vm.edit(producto)" aria-label="Editar">Editar</md-button>
+                        <md-button class="md-raised md-primary" ng-show="!producto.edit" ng-disabled="!vm.online" ng-click="vm.delete(producto)" aria-label="Borrar">Borrar</md-button>
+                        <md-button class="md-raised md-primary" ng-show="producto.edit" ng-disabled="!vm.online || editarProductoAP.$invalid" ng-click="vm.update(producto)" aria-label="Guardar">Guardar</md-button>
+                        <md-button class="md-raised md-primary" ng-show="producto.edit" ng-click="vm.cancelUpdate(producto)" aria-label="Cancelar">Cancelar</md-button>
+                    </md-card-actions>
+                </ng-form>
+            </md-card>
+        </div>
+        <div flex>
+            <md-card ng-repeat="productoV in vm.productos | filter: { tipo: 'Vida' } | orderBy: vm.numeroSuma">
+                <ng-form name="editarProductoVD" novalidate>
+                    <md-card-title>
+                        <md-card-title-text layout="column">
+                            <div>
+                                <span ng-show="!productoV.edit" class="md-headline">{{productoV.descripcion}}</span>
+                                <md-input-container ng-show="productoV.edit">
+                                    <label>Descripci&oacute;n</label>
+                                    <input ng-model="vm.descripcion" name="descripcion" capitalize required md-maxlength="75">
+                                    <div ng-messages="editarProductoVD.descripcion.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout>
+                                <span ng-show="!productoV.edit" class="md-subhead">{{productoV.suma_asegurada | currency: "$ ": 2}}</span>
+                                <md-input-container ng-show="productoV.edit">
+                                    <label>Suma asegurada</label>
+                                    <input ng-model="vm.suma" name="suma" required ng-pattern="/^[0-9]{1,9}$/">
+                                    <div ng-messages="editarProductoVD.suma.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div ng-show="productoV.edit" ng-repeat="prima in productoV.primas | orderBy: 'edadIni'" layout>
+                                <div flex layout ng-hide="prima.edit">
+                                    <div>
+                                        <md-button ng-click="vm.deletePrima(prima)" class="md-fab md-mini">
+                                            <ng-md-icon icon="remove" size="30" style="fill: #ffffff" aria-label="Borrar prima"></ng-md-icon>
+                                        </md-button>
+                                    </div>
+                                    <div flex="70" hide show-gt-sm>
+                                        <rzslider rz-slider-model="prima.edadIni" ng-attr-rz-slider-high="prima.edadFin" rz-slider-options="vm.sliderOptions"></rzslider>
+                                    </div>
+                                    <div flex hide-gt-sm layout layout-wrap>
+                                        <div flex="50" style="text-align: center"><strong>Edad Inicial</strong><br />{{prima.edadIni}}</div>
+                                        <div flex="50" style="text-align: center"><strong>Edad Final</strong><br />{{prima.edadFin}}</div>
+                                        <div flex="50" style="text-align: center; margin-top:10px;"><strong>DIBA</strong><br />{{prima.diba}}</div>
+                                        <div flex="50" style="text-align: center; margin-top:10px;"><strong>Fallecimiento</strong><br />{{prima.fallecimiento}}</div>
+                                        <div flex="50" style="text-align: center; margin-top:10px;"><strong>IMA</strong><br />{{prima.ima}}</div>
+                                        <div flex="50" style="text-align: center; margin-top:10px;"><strong>ISE</strong><br />{{prima.ise}}</div>
+                                        <hr flex />
+                                    </div>
+                                    <div style="padding: 3px 0px 0px 15px;" ng-show="!prima.edit" layout hide show-gt-sm>
+                                        <div><label class="rz-bubble">DIBA: </label><br/><label class="rz-bubble">{{prima.diba}}</label></div>
+                                        <div><label class="rz-bubble">Fallecimiento: </label><br/><label class="rz-bubble">{{prima.fallecimiento}}</label></div>
+                                        <div><label class="rz-bubble">IMA: </label><br/><label class="rz-bubble">{{prima.ima}}</label></div>
+                                        <div><label class="rz-bubble">ISE: </label><br/><label class="rz-bubble">{{prima.ise}}</label></div>
+                                    </div>
+                                    <div>
+                                        <md-button ng-click="vm.editPrima(prima)" class="md-fab md-mini md-primary" aria-label="Editar prima">
+                                            <ng-md-icon icon="edit" size="30" style="fill: #ffffff"></ng-md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                                <div flex layout ng-show="prima.edit">
+                                    <ng-form name="editarPrimaProductoAP" novalidate>
+                                        <md-input-container>
+                                            <label>Edad inicial</label>
+                                            <input required name="edadIni" ng-model="prima.edadIni" ng-pattern="/^[0-9]{1,9}$/">
+                                            <div ng-messages="editarPrimaProductoAP.edadIni.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>Edad final</label>
+                                            <input name="edadFin" ng-model="prima.edadFin" ng-pattern="/^[0-9]{1,9}$/">
+                                            <div ng-messages="editarPrimaProductoAP.edadFin.$error">
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>DIBA</label>
+                                            <input required name="diba" ng-model="prima.diba" ng-pattern="/^\d+(?:\.\d+)?$/">
+                                            <div ng-messages="editarPrimaProductoAP.diba.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>Fallecimiento</label>
+                                            <input required name="fallecimiento" ng-model="prima.fallecimiento" ng-pattern="/^\d+(?:\.\d+)?$/">
+                                            <div ng-messages="editarPrimaProductoAP.fallecimiento.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>IMA</label>
+                                            <input required name="ima" ng-model="prima.ima" ng-pattern="/^\d+(?:\.\d+)?$/">
+                                            <div ng-messages="editarPrimaProductoAP.ima.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>ISE</label>
+                                            <input required name="ise" ng-model="prima.ise" ng-pattern="/^\d+(?:\.\d+)?$/">
+                                            <div ng-messages="editarPrimaProductoAP.ise.$error">
+                                                <div ng-message="required">Campo obligatorio.</div>
+                                                <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-button class="md-raised md-primary" ng-click="vm.updatePrima(prima)" ng-disabled="!vm.online || editarPrimaProductoAP.$invalid" aria-label="Actualizar prima">Actualizar factores</md-button>
+                                        <md-button class="md-raised md-primary" ng-click="vm.hideUpdatePrima(prima)" aria-label="Cancelar prima">Cancelar</md-button>
+                                    </ng-form>
+                                </div>
+                            </div>
+                            <div ng-show="productoV.prima">
+                                <ng-form name="editarNuevaPrimaProductoVD" novalidate>
+                                    <md-input-container>
+                                        <label>Edad inicial</label>
+                                        <input required name="edadIni" ng-model="vm.edadIni" ng-pattern="/^[0-9]{1,9}$/" ng-required="productoV.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoVD.edadIni.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Edad final</label>
+                                        <input name="edadFin" ng-model="vm.edadFin" ng-pattern="/^[0-9]{1,9}$/">
+                                        <div ng-messages="editarNuevaPrimaProductoVD.edadFin.$error">
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>DIBA</label>
+                                        <input required name="diba" ng-model="vm.diba" ng-pattern="/^\d+(?:\.\d+)?$/" ng-required="productoV.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoVD.diba.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>Fallecimiento</label>
+                                        <input required name="fallecimiento" ng-model="vm.fallecimiento" ng-pattern="/^\d+(?:\.\d+)?$/" ng-required="productoV.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoVD.fallecimiento.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>IMA</label>
+                                        <input required name="ima" ng-model="vm.ima" ng-pattern="/^\d+(?:\.\d+)?$/" ng-required="productoV.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoVD.ima.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container>
+                                        <label>ISE</label>
+                                        <input required name="ise" ng-model="vm.ise" ng-pattern="/^\d+(?:\.\d+)?$/" ng-required="productoV.prima">
+                                        <div ng-messages="editarNuevaPrimaProductoVD.ise.$error">
+                                            <div ng-message="required">Campo obligatorio.</div>
+                                            <div ng-message="pattern">Solo permite caracteres numericos.</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-button class="md-raised md-primary" ng-click="vm.addPrimaProducto(productoV)" ng-disabled="!vm.online || editarNuevaPrimaProductoVD.$invalid" aria-label="Guardar prima">Guardar prima</md-button>
+                                    <md-button class="md-raised md-primary" ng-click="vm.hidePrimaProducto(productoV)" aria-label="Cancelar prima">Cancelar</md-button>
+                                </ng-form>
+                            </div>
+                            <div>
+                                <md-button class="md-raised md-primary" ng-show="productoV.edit" ng-disabled="!vm.online" ng-click="vm.showPrimaProducto(productoV)" aria-label="Agregar prima">Agregar prima</md-button>
+                            </div>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-raised md-primary" ng-show="!productoV.edit" ng-disabled="!vm.online" ng-click="vm.edit(productoV)" aria-label="Editar">Editar</md-button>
+                        <md-button class="md-raised md-primary" ng-show="!productoV.edit" ng-disabled="!vm.online" ng-click="vm.delete(productoV)" aria-label="Borrar">Borrar</md-button>
+                        <md-button class="md-raised md-primary" ng-show="productoV.edit" ng-disabled="!vm.online || editarProductoVD.$invalid" ng-click="vm.update(productoV)" aria-label="Guardar">Guardar</md-button>
+                        <md-button class="md-raised md-primary" ng-show="productoV.edit" ng-click="vm.cancelUpdate(productoV)" aria-label="Cancelar">Cancelar</md-button>
+                    </md-card-actions>
+                </ng-form>
+            </md-card>
+        </div>
+    </div>
+</md-content>

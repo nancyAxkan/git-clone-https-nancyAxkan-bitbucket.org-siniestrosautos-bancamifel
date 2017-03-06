@@ -1,0 +1,57 @@
+@media only screen and (min-width:1800px) and (max-width: 3000px)  {
+    .mifel_login {
+        background:url(/assets/mifel_login.png);
+        min-height: 1200px;
+    }
+}
+@media only screen and (min-width:600px) and (max-width: 1799px)  {
+    .mifel_login {
+        background:url(/assets/mifel_login.png);
+        min-height: 700px;
+    }
+    .mifel_login .titulo{
+         opacity: 0.78;
+    }
+}
+@media only screen and (max-width: 599px)  {
+    .mifel_login {
+        background:-webkit-linear-gradient(281deg,#0c63aa 40%,#7ac4fa 100%);
+        background:linear-gradient(169deg,#0c63aa 40%,#7ac4fa 100%);
+        background-color:#0c63aa;
+        min-height: 700px;
+    }
+    .mifel_login .titulo{
+        opacity: 1
+    }
+}
+
+.mifel_login {
+    background-position: top center; 
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.mifel_login .titulo {
+    background: #12B5B0;
+    color: #FFF;
+    font-size: xx-large;
+    text-align: center;
+    margin-bottom: 5%;
+}
+.mifel_login .descripcion {
+    text-shadow: 1px 1px #FFF;
+    color: #333333;
+    padding: 0px 15% 0px 20%;
+}
+.mifel_login .form_container {
+    padding: 5%;
+    max-width: 450px
+}
+.mifel_login .form_header {
+    background: #F5F5F5;
+    color: #333;
+}
+.mifel_login .form_footer {
+    background: #005695;
+    color: #FFF;
+    text-align: center;
+}

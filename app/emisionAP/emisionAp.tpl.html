@@ -1,0 +1,987 @@
+<md-progress-linear ng-show="ec.loading" md-mode="indeterminate"></md-progress-linear>
+<div class="mifel_emisionAp" ng-show="!ec.loading">
+    <form name="emisionForm" id="emisionForm" class="ng-invalid-required">
+        <!---Datos Solicitante--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">Datos para la emisión de Protección Accidentes</span>
+                    <span class="md-subhead">Datos solicitante</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="20" flex-xs>
+                            <label>Número de cliente Mifel</label>
+                            <input type="text" name="numClienteSolicitante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9]*$/" md-maxlength="15" ng-model="ec.emision.datosSolicitante.mifel">
+                            <div class="md-accent" ng-messages="emisionForm.numClienteSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input type="text" ng-model="ec.emision.datosSolicitante.apPat" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input type="text" ng-model="ec.emision.datosSolicitante.apMat" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input type="text" ng-model="ec.emision.datosSolicitante.nombre" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="20">
+                            <md-datepicker name="fechaNac" ng-model="ec.emision.datosSolicitante.fechaNac" md-placeholder="Fecha de nacimiento*" required></md-datepicker>
+                            <div class="md-accent" ng-messages="emisionForm.fechaNac.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <md-radio-group name="genero" ng-model="ec.emision.datosSolicitante.genero" ng-disabled="true" required>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Género</label>
+                                    <md-radio-button flex value="m">Femenino</md-radio-button>
+                                    <md-radio-button flex value="h">Masculino</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="md-accent" ng-messages="emisionForm.genero.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Edad (Años)</label>
+                            <input type="number" name="edad" ng-model="ec.emision.datosSolicitante.edad" ng-disabled="true" required>
+                            <div class="md-accent" ng-messages="emisionForm.edad.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Estado civil</label>
+                            <md-select name="civil" ng-model="ec.emision.datosSolicitante.estadoCiv" required>
+                                <md-option value="casado">Casado (a)</md-option>
+                                <md-option value="divorciado">Divorciado (a)</md-option>
+                                <md-option value="soltero">Soltero (a)</md-option>
+                                <md-option value="union libre">Unión libre</md-option>
+                                <md-option value="viudo">Viudo (a)</md-option>
+                            </md-select>
+                            <div class="md-accent" ng-messages="emisionForm.civil.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Profesión u ocupación</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="profesionSolicitante" ng-model="ec.emision.datosSolicitante.profesion" required>
+                            <div class="md-accent" ng-messages="emisionForm.profesionSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>R.F.C. (Con homoclave)</label>
+                            <input type="text" name="rfcSolicitante" md-maxlength="13" ng-pattern="/^([A-Z&]{4})(\d{6})[A-Z0-9]{0,3}$/i" ng-model="ec.emision.datosSolicitante.rfc" ng-keyup="ec.validaEdadRFC($event)" required>
+                            <div class="hint" ng-if="ec.showHints">Verifica que la edad de COTIZACIÓN coincida con el RFC</div>
+                            <div class="md-accent" ng-messages="emisionForm.rfcSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 13 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El formato de R.F.C (Con homoclave) es inválido</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>CURP</label>
+                            <input type="text" name="curpSolicitante" ng-pattern="/^([A-Z]{4})([0-9]{6})([A-Z]{6})([A-Z0-9]{2})$/i" md-maxlength="18" ng-model="ec.emision.datosSolicitante.curp">
+                            <div class="md-accent" ng-messages="emisionForm.curpSolicitante.$error" role="alert">
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 18 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El formato de CURP es inválido</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="40" flex-xs="100">
+                            <label>Nacionalidad</label>
+                            <input type="text" name="nacionalidad" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="ec.emision.datosSolicitante.nacionalidad" required>
+                            <div class="md-accent" ng-messages="emisionForm.nacionalidad.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex="40" flex-xs="100">
+                            <label>País de nacimiento</label>
+                            <input type="text" name="ciudadNacimeinto" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" ng-model="ec.emision.datosSolicitante.ciudadNacimineto" required>
+                            <div class="md-accent" ng-messages="emisionForm.ciudadNacimeinto.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!---Datos Domicilio--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-subhead">Datos domicilio particular</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Calle</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" name="calleDomicilio" ng-model="ec.emision.datosDomicilio.calle" required>
+                            <div class="md-accent" ng-messages="emisionForm.calleDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>No. exterior</label>
+                            <input type="text" ng-pattern="/[a-zA-Z0-9.-](\s{1}[a-zA-Z0-9.-])*$/" md-maxlength="15" name="noExteriorDomicilio" ng-model="ec.emision.datosDomicilio.noExterior" required>
+                            <div class="md-accent" ng-messages="emisionForm.noExteriorDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>No. interior</label>
+                            <input type="text" ng-pattern="/[a-zA-Z0-9.-](\s{1}[a-zA-Z0-9.-])*$/" md-maxlength="15" name="noInteriorDomicilio" ng-model="ec.emision.datosDomicilio.noInterior">
+                            <div class="md-accent" ng-messages="emisionForm.noInteriorDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Colonia</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="coloniaDomicilio" ng-model="ec.emision.datosDomicilio.colonia" required>
+                            <div class="md-accent" ng-messages="emisionForm.coloniaDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Ciudad o Población</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="ciudadDomicilio" ng-model="ec.emision.datosDomicilio.ciudad" required>
+                            <div class="md-accent" ng-messages="emisionForm.ciudadDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Municipio o Delegación</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="municipioDomicilio" ng-model="ec.emision.datosDomicilio.municipio" required>
+                            <div class="md-accent" ng-messages="emisionForm.municipioDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Estado</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="estadoDomicilio" ng-model="ec.emision.datosDomicilio.estado" required>
+                            <div class="md-accent" ng-messages="emisionForm.estadoDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>C.P</label>
+                            <input ng-model="ec.emision.datosDomicilio.cp" name="cpDomicilio" ng-pattern="/^[0-9]{5}$/" md-maxlength="5" required>
+                            <div class="md-accent" ng-messages="emisionForm.cpDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 5 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Teléfono Particular</label>
+                            <input ng-model="ec.emision.datosDomicilio.telefono" name="telefonoDomicilio" md-maxlength="15" ng-pattern="/^[\-()\0-9]{8,15}$/" required/>
+                            <div class="md-accent" ng-messages="emisionForm.telefonoDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 8 o 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos, "( ) -" son válidos </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Teléfono Oficina</label>
+                            <input ng-model="ec.emision.datosDomicilio.telefonoOficina" name="telefonoOficinaDomicilio" md-maxlength="15" ng-pattern="/^[\-()\0-9]{8,15}$/" required/>
+                            <div class="md-accent" ng-messages="emisionForm.telefonoOficinaDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 8 o 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos y "( ) -" son válidos </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Correo electrónico</label>
+                            <input type="email" ng-model="ec.emision.datosDomicilio.email" name="emailDomicilio" md-maxlength="50" ng-pattern="/^.+@.+\..+$/" required>
+                            <div class="md-accent" ng-messages="emisionForm.emailDomicilio.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El correo electrónico proporcionado es incorrecto, por favor ingréselo en el siguiente formato: usuario/a@dominio Ej: ejemplo@bancamifel.com.mx</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!---Datos Contratante--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-subhead">Datos del contratante</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group ng-model="ec.igualSol" name="opcionContratante" ng-change="ec.eliminarContratante()" ng-disabled="ec.emision.datosSolicitante.rfc === ''" required>
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">¿El Contratante es igual al Solicitante Titular?</label>
+                                    <md-radio-button value="1">Si</md-radio-button>
+                                    <md-radio-button value="0">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionForm.opcionContratante.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="column" ng-show="ec.igualSol == '0'">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="20" flex-xs>
+                            <label>Número de cliente Mifel</label>
+                            <input type="text" name="numClienteContratante" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9]*$/" md-maxlength="15" ng-model="ec.emision.datosContratante.mifel">
+                            <div class="md-accent" ng-messages="emisionForm.numClienteContratante.$error" role="alert">
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 15 carácteres</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="apPatCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.apPat">
+                            <div class="md-accent" ng-messages="emisionForm.apPatCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="apMatCont" ng-model="ec.emision.datosContratante.apMat">
+                            <div class="md-accent" ng-messages="emisionForm.apMatCont.$error" role="alert">
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="nombreCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.nombre">
+                            <div class="md-accent" ng-messages="emisionForm.nombreCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <md-radio-group name="generoCont" ng-model="ec.emision.datosContratante.genero" ng-required="ec.igualSol == '0'">
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Género *</label>
+                                    <md-radio-button flex value="m">Femenino</md-radio-button>
+                                    <md-radio-button flex value="h">Masculino</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionForm.generoCont.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Parentesco</label>
+                            <md-select name="parentescoCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.parentesco">
+                                <md-option value="padre">Padre</md-option>
+                                <md-option value="madre">Madre</md-option>
+                                <md-option value="abuelo">Abuelo(a)</md-option>
+                                <md-option value="concubino">Concubino(a)</md-option>
+                                <md-option value="conyugue">Cónyuge</md-option>
+                                <md-option value="hermano">Hermano(a)</md-option>
+                                <md-option value="hijo">Hijo(a)</md-option>
+                                <md-option value="nieto">Nieto(a)</md-option>
+                                <md-option value="primo">Primo(a)</md-option>
+                                <md-option value="tio">Tio(a)</md-option>
+                                <md-option value="familiar">Familiar</md-option>
+                                <md-option value="otro">Otro</md-option>
+                            </md-select>
+                            <div class="md-accent" ng-messages="emisionForm.parentescoCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>R.F.C (Con homoclave)</label>
+                            <input type="text" name="rfcCont" md-maxlength="13" ng-pattern="/^([A-Z&]{4})(\d{6})[A-Z0-9]{0,3}$/i" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.rfc">
+                            <div class="md-accent" ng-messages="emisionForm.rfcCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 13 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El formato de R.F.C (Con homoclave) es inválido</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>CURP</label>
+                            <input type="text" name="curpCont" ng-pattern="/^([A-Z]{4})([0-9]{6})([A-Z]{6})([A-Z0-9]{2})$/i" md-maxlength="18" ng-model="ec.emision.datosContratante.curp">
+                            <div class="md-accent" ng-messages="emisionForm.curpCont.$error" role="alert">
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 18 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El formato de CURP es inválido</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Calle</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9])*$/" md-maxlength="25" name="calleCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.calle">
+                            <div class="md-accent" ng-messages="emisionForm.calleCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>No. exterior</label>
+                            <input type="text" ng-pattern="/[a-zA-Z0-9.-](\s{1}[a-zA-Z0-9.-])*$/" md-maxlength="15" name="noExteriorCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.noExterior">
+                            <div class="md-accent" ng-messages="emisionForm.noExteriorCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 8 o 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>No. interior</label>
+                            <input type="text" ng-pattern="/[a-zA-Z0-9.-](\s{1}[a-zA-Z0-9.-])*$/" md-maxlength="15" name="noInteriorCont" ng-model="ec.emision.datosContratante.noInterior">
+                            <div class="md-accent" ng-messages="emisionForm.noInteriorCont.$error" role="alert">
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 8 o 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Colonia</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="coloniaCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.colonia">
+                            <div class="md-accent" ng-messages="emisionForm.coloniaCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Ciudad o Población</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="ciudadCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.ciudad">
+                            <div class="md-accent" ng-messages="emisionForm.ciudadCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Municipio o Delegación</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="municipioCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.municipio">
+                            <div class="md-accent" ng-messages="emisionForm.municipioCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Estado</label>
+                            <input type="text" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" md-maxlength="25" name="estadoCont" ng-required="ec.igualSol == '0'" ng-model="ec.emision.datosContratante.estado">
+                            <div class="md-accent" ng-messages="emisionForm.estadoCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>C.P</label>
+                            <input ng-model="ec.emision.datosContratante.cp" ng-pattern="/^[0-9]{5}$/" name="cpCont" ng-required="ec.igualSol == '0'" md-maxlength="5">
+                            <div class="md-accent" ng-messages="emisionForm.cpCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Teléfono Particular</label>
+                            <input ng-model="ec.emision.datosContratante.telefono" name="telefonoDomicilioCont" md-maxlength="15" ng-pattern="/^[\-()\0-9]{8,15}$/" ng-required="ec.igualSol == '0'"/>
+                            <div class="md-accent" ng-messages="emisionForm.telefonoDomicilioCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 8 o 15 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Solo carácteres númericos, "( ) -" son válidos </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Correo electrónico</label>
+                            <input type="email" ng-model="ec.emision.datosContratante.email" name="emailDomicilioCont" md-maxlength="50" ng-pattern="/^.+@.+\..+$/" ng-required="ec.igualSol == '0'">
+                            <div class="md-accent" ng-messages="emisionForm.emailDomicilioCont.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">El correo electrónico proporcionado es incorrecto, por favor ingréselo en el siguiente formato: usuario/a@dominio Ej: ejemplo@bancamifel.com.mx</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!---Datos Plan--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-subhead">Datos del plan</span>
+                </md-card-header-text>
+                <md-card-header-text>
+                    <span class="md-subhead nota">Nota: Solo aplica deducible de $1,000 en la cobertura de Reembolso de Gastos Médicos por Accidente</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Plan</label>
+                            <input type="text" ng-model="ec.emision.datosPlan.plan" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Suma Asegurada A.P (MXN) </label>
+                            <input type="text" value="{{ec.emision.datosPlan.sumaAseg | currency}}" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Deducible (MXN)</label>
+                            <input type="text" value="{{ec.emision.datosPlan.deducible | currency}}" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Forma de pago</label>
+                            <input type="text" ng-model="ec.emision.datosPlan.formaPago" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                </div>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-subhead">Coberturas Básicas</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Muerte Accidental (MXN) </label>
+                            <input type="text" value="{{ec.emision.datosPlan.coberturasBasicas.muertAcc | currency}}" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Reembolso de Gastos Funerarios (MXN) </label>
+                            <input type="text" value="{{ec.emision.datosPlan.coberturasBasicas.reGMMFun | currency}}" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Invalidez total y permanente (MXN) </label>
+                            <input type="text" value="{{ec.emision.datosPlan.coberturasBasicas.invalidez | currency}}" ng-disabled="true">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Pérdidas orgánicas (MXN) </label>
+                            <input type="text" value="{{ec.emision.datosPlan.coberturasBasicas.perdidas | currency}}" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="50" flex-xs="100">
+                            <label>Reembolso de Gastos Médicos por Accidente (MXN) </label>
+                            <input type="text" value="{{ec.emision.datosPlan.coberturasBasicas.accid | currency}}" ng-disabled="true">
+                        </md-input-container>
+                    </div>
+                </div>
+                <md-card-header>
+                    <md-card-header-text>
+                        <span class="md-subhead">Servicios incluidos</span>
+                    </md-card-header-text>
+                </md-card-header>
+                <div layout="column">
+                    <div layout="row" layout-padding layout-xs="column" flex="60">
+                        <span style="color: #a5a5a5;">- Asistencia médica</span>
+                    </div>
+                    <div layout="row" layout-padding layout-xs="column" flex="60">
+                        <span style="color: #a5a5a5;">- Asistencia Nutricional</span>
+                    </div>
+                    <div layout="row" layout-padding layout-xs="column" flex="60">
+                        <span style="color: #a5a5a5;">- Asistencia Psicológica</span>
+                    </div>
+                </div>
+                <div layout="column" flex="100">
+                    <div layout="row" layout-xs="column">
+                        <div class="header_cotiza" flex ng-show="ec.actualizo === false">
+                            <div class="prima">
+                                <span>Prima Total</span>
+                                <div>
+                                    <span class="precio">{{ec.tarifaActualizada.primaTotal | currency}}</span>
+                                    <span>MXN</span>
+                                </div>
+                                <span>{{ec.tarifaActualizada.periodos}} pago(s) de {{ec.tarifaActualizada.primaTotal/ec.tarifaActualizada.periodos | currency}}</span>
+                            </div>
+                            <div class="plan" ng-show="ec.tarifaActualizada.periodos > 1">
+                                <span>Pagando de forma Anual tu </span>
+                                <span ng-class="ec.glow && ec.tarifaActualizada.periodos > 1 ? 'ahorro glow' : 'ahorro'">ahorro</span>
+                                <span>sería de: {{ec.tarifaActualizada.ahorro | currency}}</span>
+                            </div>
+                            <div class="plan" ng-show="ec.tarifaActualizada.periodos == 1"></div>
+                        </div>
+                        <div class="header_cotiza" flex ng-show="ec.actualizo === true">
+                            <div>
+                                <span class="precio">Ocurrió un error al tarificar, consultar al administrador.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!---Datos Beneficiarios--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Beneficiarios</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-card-actions>
+                            <md-button ng-click="ec.secAgrBen = true" aria-label="Agregar beneficiario">
+                                <ng-md-icon icon="add_box" style="fill: #43C2BE" size="35"></ng-md-icon>
+                            </md-button>
+                            <span class="md-subhead">Agregar beneficiario</span>
+                        </md-card-actions>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-padding ng-show="ec.emision.datosBeneficiarios.length === 0">
+                        <div style="color: rgb(6,204,153);font-size: 13px;vertical-align: top;">Debe de existir al menos un beneficiario y tener el 100% de participación de la suma asegurada *</div>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-padding ng-show="ec.porcentajeInicial !== 0">
+                        <div style="color: rgb(6,204,153);font-size: 13px;vertical-align: top;">El porcentaje de participación de la suma aseguarada de los beneficarios debe sumar el 100% *</div>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-padding ng-show="ec.emision.datosBeneficiarios.length === 10">
+                        <div style="color: rgb(6,204,153);font-size: 13px;vertical-align: top;">Solo se puede tener un máximo de 10 beneficiarios *</div>
+                    </div>
+                    <div ng-show="ec.secAgrBen" layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input type="text" md-maxlength="25" name="apPatBenf" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="ec.datosBeneficiarios.apPat" ng-required="ec.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionForm.apPatBenf.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input type="text" md-maxlength="25" name="apMatBenf" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="ec.datosBeneficiarios.apMat" ng-required="ec.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionForm.apMatBenf.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input type="text" md-maxlength="25" name="nombreBenf" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="ec.datosBeneficiarios.nombre" ng-required="ec.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionForm.nombreBenf.$error" role="alert">
+                                <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Parentesco</label>
+                            <md-select name="parentescoBenf" ng-model="ec.datosBeneficiarios.parentesco" ng-required="ec.secAgrBen">
+                                <md-option value="padre">Padre</md-option>
+                                <md-option value="madre">Madre</md-option>
+                                <md-option value="abuelo">Abuelo(a)</md-option>
+                                <md-option value="concubino">Concubino(a)</md-option>
+                                <md-option value="conyugue">Cónyuge</md-option>
+                                <md-option value="hermano">Hermano(a)</md-option>
+                                <md-option value="hijo">Hijo(a)</md-option>
+                                <md-option value="nieto">Nieto(a)</md-option>
+                                <md-option value="primo">Primo(a)</md-option>
+                                <md-option value="tio">Tio(a)</md-option>
+                                <md-option value="familiar">Familiar</md-option>
+                                <md-option value="otro">Otro</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Participación(%) de la </br>suma asegurada</label>
+                            <input type="number" name="porcBenf" min="{{ec.porcentajeMinimo}}" max="{{ec.porcentajeInicial}}" ng-pattern="/^[0-9]+$/" ng-model="ec.datosBeneficiarios.porcentaje" ng-required="ec.secAgrBen">
+                            <div class="md-accent" ng-messages="emisionForm.porcBenf.$error" role="alert">
+                                <div class="md-accent" ng-message="pattern">Solo números enteros son válidos</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div ng-show="ec.secAgrBen" layout="row" layout-align="end center" layout-xs="column">
+                        <md-button flex-xs ng-click="ec.cierraBeneficiario()" class="md-raised md-primary" aria-label="Cancelar agregar beneficiario">
+                            Cancelar
+                        </md-button>
+                        <md-button flex-xs ng-click="ec.agregaBeneficiario()" class="md-raised md-primary" ng-disabled="emisionForm.porcBenf.$invalid || emisionForm.parentescoBenf.$invalid || emisionForm.nombreBenf.$invalid || emisionForm.apMatBenf.$invalid || emisionForm.apPatBenf.$invalid" aria-label="Agregar beneficiario">
+                            Agregar beneficiario
+                        </md-button>
+                    </div>
+                    <md-divider></md-divider>
+                    <div ng-repeat="beneficairo in ec.emision.datosBeneficiarios" layout="row" layout-xs="column">
+                        <md-card-actions>
+                            <md-button ng-click="ec.borrarBeneficiario(beneficairo)" aria-label="Borrar beneficiario">
+                                <ng-md-icon icon="delete" style="fill:#ec0a0a" size="35"></ng-md-icon>
+                            </md-button>
+                        </md-card-actions>
+                        <md-input-container flex>
+                            <label>Primer apellido</label>
+                            <input ng-disabled="true" ng-model="beneficairo.apPat">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Segundo apellido</label>
+                            <input ng-disabled="true" ng-model="beneficairo.apMat">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Nombre(s)</label>
+                            <input ng-disabled="true" ng-model="beneficairo.nombre">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Parentesco</label>
+                            <input ng-disabled="true" ng-model="beneficairo.parentesco">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Participación(%) de la suma asegurada</label>
+                            <input ng-disabled="true" ng-model="beneficairo.porcentaje">
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!---Datos Cobranza--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Datos de cobranza</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="viaPago" ng-model="ec.emision.datosCobranza.viaPago" ng-change="ec.cambiaViaPago();" required>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Periodicidad del pago</label>
+                                    <md-radio-button flex value="credito">Cargo a tarjeta de crédito</md-radio-button>
+                                    <md-radio-button flex value="debito">Cargo a tarjeta de débito</md-radio-button>
+                                    <md-radio-button flex value="clabe">CLABE</md-radio-button>
+                                    <md-radio-button flex value="pagoRef">Pago referenciado</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionForm.viaPago.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div ng-show="ec.emision.datosCobranza.viaPago === 'credito' || ec.emision.datosCobranza.viaPago === 'debito'">
+                        <md-card-header>
+                            <md-card-header-text>
+                                <span class="md-subhead">Cargo a tarjeta de crédito o débito</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex>
+                                <label>Banco</label>
+                                <input name="bancoObligatoria" md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="ec.emision.datosCobranza.tarjetaObligatoria.banco" ng-required="ec.emision.datosCobranza.viaPago === 'credito' || ec.emision.datosCobranza.viaPago === 'debito'">
+                                <div class="md-accent" ng-messages="emisionForm.bancoObligatoria.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Número de tarjeta</label>
+                                <input type="password" name="tarjetaNumObligatoria" md-maxlength="16" ng-pattern="/^(\d{16})$/i" ng-model="ec.emision.datosCobranza.tarjetaObligatoria.numero" ng-required="ec.emision.datosCobranza.viaPago === 'credito' || ec.emision.datosCobranza.viaPago === 'debito'">
+                                <div class="md-accent" ng-messages="emisionForm.tarjetaNumObligatoria.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 16 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Mes de expiración</label>
+                                <input type="number" min="1" max="12" ng-pattern="/^[0-9]+$/" name="mesObli" ng-model="ec.emision.datosCobranza.tarjetaObligatoria.mesExpiracion" ng-required="ec.emision.datosCobranza.viaPago === 'credito' || ec.emision.datosCobranza.viaPago === 'debito'">
+                                <div class="md-accent" ng-messages="emisionForm.mesObli.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Año de expiración</label>
+                                <input type="number" min="{{ec.agnoValidoTarjeta.getFullYear()}}" max="{{ec.agnoValidoTarjeta.getFullYear() + 6}}" ng-pattern="/^[0-9]+$/" name="agnoExpiracionObli" ng-model="ec.emision.datosCobranza.tarjetaObligatoria.agnoExpiracion" ng-required="ec.emision.datosCobranza.viaPago === 'credito' || ec.emision.datosCobranza.viaPago === 'debito'">
+                                <div class="md-accent" ng-messages="emisionForm.agnoExpiracionObli.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="pattern">Solo carácteres númericos y en formato "YYYY" es válido</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <md-divider></md-divider>
+                        <md-card-header>
+                            <md-card-header-text>
+                                <span class="md-subhead">Cargo a tarjeta de crédito o débito (Opcional)</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex>
+                                <label>Banco</label>
+                                <input name="bancoOpcional" md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="ec.emision.datosCobranza.tarjetaOpcional.banco">
+                                <div class="md-accent" ng-messages="emisionForm.bancoOpcional.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Número de tarjeta</label>
+                                <input type="password" name="tarjetaNumOpcional" md-maxlength="16" ng-pattern="/^(\d{16})$/i" ng-model="ec.emision.datosCobranza.tarjetaOpcional.numero">
+                                <div class="md-accent" ng-messages="emisionForm.tarjetaNumOpcional.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 16 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Mes de expiración</label>
+                                <input type="number" min="1" max="12" name="mesOpc" ng-pattern="/^[0-9]+$/" ng-model="ec.emision.datosCobranza.tarjetaOpcional.mesExpiracion">
+                                <div class="md-accent" ng-messages="emisionForm.mesOpc.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="pattern">Solo carácteres númericos son válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Año de expiración</label>
+                                <input type="number" min="{{ec.agnoValidoTarjeta.getFullYear()}}" max="{{ec.agnoValidoTarjeta.getFullYear() + 6}}" ng-pattern="/^[0-9]+$/" name="agnoExpiracionOpc" ng-model="ec.emision.datosCobranza.tarjetaOpcional.agnoExpiracion">
+                                <div class="md-accent" ng-messages="emisionForm.agnoExpiracionOpc.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="pattern">Solo carácteres númericos y en formato "YYYY" es válido</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div ng-show="ec.emision.datosCobranza.viaPago === 'clabe'">
+                        <md-card-header>
+                            <md-card-header-text>
+                                <span class="md-subhead">Datos de cuenta CLABE</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex>
+                                <label>Banco</label>
+                                <input name="bancoClabe" md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="ec.emision.datosCobranza.datosClabe.banco" ng-required="ec.emision.datosCobranza.viaPago === 'clabe'">
+                                <div class="md-accent" ng-messages="emisionForm.bancoClabe.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Número CLABE</label>
+                                <input type="text" name="numeroClabe" md-maxlength="18" ng-pattern="/^(\d{18})$/i" ng-model="ec.emision.datosCobranza.datosClabe.numeroClabe" ng-required="ec.emision.datosCobranza.viaPago === 'clabe'">
+                                <div class="md-accent" ng-messages="emisionForm.numeroClabe.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 18 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">La cuenta CLABE debe ser de 18 dígitos númericos.</div>
+                                </div>
+                            </md-input-container>
+
+                        </div>
+                    </div>
+                    <div layout="row" layout-xs="column" ng-show="ec.emision.datosCobranza.viaPago !== 'pagoRef'">
+                        <md-input-container flex>
+                            <md-radio-group name="opcionContratantePago" ng-model="ec.emision.datosCobranza.titular" ng-change="ec.opcionContratantePago()" ng-required="ec.emision.datosCobranza.viaPago !== 'pagoRef'">
+                                <div layout="row" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">¿El contratante es igual al titular de la cuenta/tarjeta?</label>
+                                    <md-radio-button value="si">Si</md-radio-button>
+                                    <md-radio-button value="no">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                           <div class="radioRequerido" ng-show="emisionForm.opcionContratantePago.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div ng-show="ec.emision.datosCobranza.titular === 'no'">
+                        <div layout="row" layout-xs="column">
+                            <md-input-container flex>
+                                <label>Nombre del titular</label>
+                                <input name="nombreTitular" md-maxlength="25" ng-pattern="/[a-zA-ZñÑáéíóúÁÉÍÓÚ](\s{1}[a-zA-ZñÑáéíóúÁÉÍÓÚ])*$/" ng-model="ec.emision.datosCobranza.nombreTitular" ng-required="ec.emision.datosCobranza.titular === 'no'">
+                                <div class="md-accent" ng-messages="emisionForm.nombreTitular.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                    <div class="md-accent" ng-message="md-maxlength">Campo de 25 carácteres</div>
+                                    <div class="md-accent" ng-message="pattern">Captura carácteres válidos</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Parentesco</label>
+                                <md-select name="parentescoTitular" ng-required="ec.emision.datosCobranza.titular === 'no'" ng-model="ec.emision.datosCobranza.parentescoTitular">
+                                    <md-option value="padre">Padre</md-option>
+                                    <md-option value="madre">Madre</md-option>
+                                    <md-option value="abuelo">Abuelo(a)</md-option>
+                                    <md-option value="concubino">Concubino(a)</md-option>
+                                    <md-option value="conyugue">Cónyuge</md-option>
+                                    <md-option value="hermano">Hermano(a)</md-option>
+                                    <md-option value="hijo">Hijo(a)</md-option>
+                                    <md-option value="nieto">Nieto(a)</md-option>
+                                    <md-option value="primo">Primo(a)</md-option>
+                                    <md-option value="tio">Tio(a)</md-option>
+                                    <md-option value="familiar">Familiar</md-option>
+                                    <md-option value="otro">Otro</md-option>
+                                </md-select>
+                                <div class="md-accent" ng-messages="emisionForm.parentescoTitular.$error" role="alert">
+                                    <div class="md-accent" ng-message="required">Campo requerido.</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-card-title-text>
+                            <p class="md-subhead">
+                                Solicito y autorizo a la institución financiera o bancaria que corresponda para que realice, a mi nombre el pago por conceptos, periodicidad y montos que se detallan, con cargo a mi tarjeta de débito o crédito, o a mi cuenta bancaria identificada por
+                                la CLABE que se cita, a favor de Grupo Nacional Provincial, S.A.B. (GNP), liberando al banco de cualquier responsabilidad.
+                            </p>
+                        </md-card-title-text>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!---Datos Consentimiento--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Consentimiento</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column">
+                        <md-card-title-text>
+                            <p class="md-subhead">Tuve a la vista el Aviso de Privacidad Integral de Grupo Nacional Provincial S.A.B. (GNP), el cual contiene y detalla las finalidades del tratamiento de mis datos personales, patrimoniales y sensibles. Asimismo, se me informó
+                                la disponibilidad de dicho aviso y sus actualizaciones en la página gnp.com.mx. Por lo anterior:</p>
+                        </md-card-title-text>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="consenTitu" ng-model="ec.emision.datosConsentimiento.solicitanteTitular" required>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Solicitante Titular (y de su Representante Legal si es menor de edad)</label>
+                                    <md-radio-button flex value="si">Si consiento dicho tratamiento</md-radio-button>
+                                    <md-radio-button flex value="no">No consiento dicho tratamiento</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionForm.consenTitu.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex>
+                            <md-radio-group name="consenCont" ng-model="ec.emision.datosConsentimiento.contratante" ng-show="ec.igualSol == '0'" ng-required="ec.igualSol == '0'">
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Contratante(Sólo si es diferente al Solicitante)</label>
+                                    <md-radio-button flex value="si">Si consiento dicho tratamiento</md-radio-button>
+                                    <md-radio-button flex value="no">No consiento dicho tratamiento</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionForm.consenCont.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!---Datos Importante--->
+        <md-card>
+            <md-card-header>
+                <md-card-header-text layout="row" flex="10">
+                    <span class="md-subhead">Importante</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column">
+                    <div layout="row" layout-xs="column" layout-sm="column" layout-align="start center">
+                        <md-card-title-text>
+                            <p class="md-subhead">
+                                Información requerida para efectos de los artículos 139 a 139 Quinquies, 193 a 199, 400 y 400 Bis del Código Penal Federal y artículos relativos.</br>-Precepto(s) legal(es) disponible(s) en gnp.com.mx-
+                            </p>
+                        </md-card-title-text>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-sm="column" layout-align="start center">
+                        <p style="text-align: justify;">
+                            ¿Tiene o ha tenido nexos o vínculos con la delincuencia organizada; o ha sido sujeto a procedimiento legal o investigación por los delitos establecidos en el Código Penal Federal relativos a la delincuencia organizada, en territorio nacional o extranjero,
+                            por alguna autoridad de México o por alguna autoridad extranjera cuyo gobierno tenga celebrado con México tratado internacional; o ha estado su nombre, alias o apodo, sus actividades, los bienes asegurar o su nacionalidad,
+                            publicados en una lista oficial, nacional o extranjera, relativa a los delitos vinculados con los artículos anteriormente citados?
+                        </p>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="35" flex-xs="100">
+                            <md-radio-group ng-model="ec.emision.datosNexos.solicitante" name="nexosTitular" required>
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Solicitante titular</label>
+                                    <md-radio-button flex value="si">Si</md-radio-button>
+                                    <md-radio-button flex value="no">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionForm.nexosTitular.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-xs="column">
+                        <md-input-container flex="35" flex-xs="100">
+                            <md-radio-group ng-model="ec.emision.datosNexos.contratante" name="nexosContratante"  ng-show="ec.igualSol == '0'" ng-required="ec.igualSol == '0'">
+                                <div layout="row" layout-xs="column" layout-sm="column" layout-padding layout-align="start center">
+                                    <label style="padding: 20px;">Contratante (Sólo si es diferente al Solicitante)</label>
+                                    <md-radio-button flex value="si">Si</md-radio-button>
+                                    <md-radio-button flex value="no">No</md-radio-button>
+                                </div>
+                            </md-radio-group>
+                            <div class="radioRequerido" ng-show="emisionForm.nexosContratante.$error.required">Campo requerido.</div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <div layout="column">
+            <md-progress-linear ng-show="ec.loadingEmision" md-mode="indeterminate"></md-progress-linear>
+            <div layout="row" layout-align="end center" layout-xs="column">
+                <md-button flex-xs="100" class="md-raised md-primary" ng-click="ec.cancelarCotizacion()" aria-label="Emitir">
+                    Cancelar cotización
+                </md-button>
+                <md-button flex-xs="100" ng-click="ec.popEnvioPoliza()" class="md-raised md-primary" ng-disabled="!ec.online || emisionForm.$invalid || ec.tarifaActualizada == {} || ec.emision.datosBeneficiarios.length === 0 || ec.porcentajeInicial !== 0 || ec.errorValidaRfc" aria-label="Emitir">
+                    Emitir
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>

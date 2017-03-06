@@ -1,0 +1,201 @@
+<md-progress-linear ng-show="vm.loading" md-mode="indeterminate"></md-progress-linear>
+<div ng-show="!vm.loading">
+    <p style="padding:10px">Busqueda y Edición de Usuarios</p>
+    <md-content layout layout-xs="column" layout-align="start start" layout-padding>
+        <md-input-container>
+            <md-icon aria-label="buscar" class="material-icons">search</md-icon>
+            <label>Nombre</label>
+            <input ng-model="vm.filtroNombre">
+        </md-input-container>
+        <md-input-container>
+            <label>Email</label>
+            <input ng-model="vm.filtroEmail">
+        </md-input-container>
+        <md-input-container>
+            <label># Empleado</label>
+            <input ng-model="vm.filtroEmpleado">
+        </md-input-container>
+        <md-input-container>
+            <label>Zona</label>
+            <md-select ng-model="vm.filtroZona">
+                <md-option ng-repeat="zona in vm.zonas" ng-value="zona.$id">
+                    {{zona.descripcion}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container>
+            <label>Sucursal</label>
+            <md-select ng-model="vm.filtroSucursal">
+                <md-option ng-repeat="sucursal in vm.sucursales | filter: { zId: vm.filtroZona }" ng-value="sucursal.$id">
+                    {{sucursal.descripcion}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+         <md-input-container>
+            <md-button ng-click="vm.filtrar()">Aplicar filtro</md-button>
+            <md-button ng-click="vm.limpiarFiltro()">Limpiar filtro</md-button>
+            <md-button ng-click="vm.showAdd()" class="md-raised md-primary" ng-disabled="!vm.online">Agregar usuario</md-button>
+        </md-input-container>
+    </md-content>
+        
+    <md-content id="catalogoUsuarios" layout="row" layout-xs="column" layout-sm="column">
+        <div flex>
+            <md-card ng-repeat="usuario in vm.usuarios | orderBy: 'nombre'">
+                <md-card-title>
+                    <md-card-title-text layout="column">
+                        <ng-form name="editarUsuario">
+                            <div>
+                                <span ng-show="!usuario.edit" class="md-headline">{{usuario.nombre}}</span>
+                                <md-input-container ng-show="usuario.edit">
+                                    <label>Nombre</label>
+                                    <input name="nombre" ng-model="usuario.nombre" md-maxlength="75" required ng-pattern="/^[a-zA-Z ñáéíóú´ÑÁÉÍÓÚ]+$/">
+                                    <div ng-messages="editarUsuario.nombre.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">El campo solo acepta letras.</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div>
+                                <span class="md-subhead">Mail: {{usuario.email}}</span><br />
+                                <md-input-container ng-show="usuario.edit">
+                                    <label># Empleado</label>
+                                    <input ng-model="usuario.empleado" ng-pattern="/^[1-9]+[0-9]*$/" required>
+                                    <div ng-messages="editarUsuario.empleado.$error">
+                                        <div ng-message="required">Campo obligatorio.</div>
+                                        <div ng-message="pattern">El campo debe ser de tipo num&eacute;rico.</div>
+                                    </div>
+                                </md-input-container>
+                                <span ng-show="!usuario.edit" class="md-subhead">Nivel: {{usuario.descripcionNivel}}</span><br />
+                                <md-input-container ng-show="usuario.edit">
+                                    <label>Nivel</label>
+                                    <md-select ng-model="usuario.nivel">
+                                        <md-option ng-repeat="nivel in vm.niveles" ng-value="nivel.nId">
+                                            {{nivel.descripcion}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <span ng-show="!usuario.edit && usuario.nivel != 0" class="md-subhead">Zona: {{usuario.descripcionZona}}</span><br />
+                                <md-input-container ng-show="usuario.edit && usuario.nivel != 0">
+                                    <label>Zona</label>
+                                    <md-select ng-model="usuario.zId">
+                                        <md-option ng-repeat="zona in vm.zonas" ng-value="zona.$id">
+                                            {{zona.descripcion}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <span ng-show="!usuario.edit && usuario.nivel != 0" class="md-subhead">Sucursal: {{usuario.descripcionSucursal}}</span><br />
+                                <md-input-container ng-show="usuario.edit && usuario.nivel != 0">
+                                    <label>Sucursal</label>
+                                    <md-select ng-model="usuario.sId">
+                                        <md-option ng-repeat="sucursal in vm.sucursales | filter: { zId: usuario.zId }" ng-value="sucursal.$id">
+                                            {{sucursal.descripcion}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                        </ng-form>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button class="md-raised md-primary" ng-show="!usuario.edit" ng-disabled="!vm.online" ng-click="vm.edit(usuario)">Editar</md-button>
+                    <md-button class="md-raised md-primary" ng-show="!usuario.edit" ng-disabled="!vm.online" ng-click="vm.delete(usuario)">Borrar</md-button>
+                    <md-button class="md-raised md-primary" ng-show="usuario.edit" ng-disabled="!vm.online || editarUsuario.$invalid" ng-click="vm.update(usuario)">Guardar</md-button>
+                    <md-button class="md-raised md-primary" ng-show="usuario.edit" ng-click="vm.cancelUpdate(usuario)">Cancelar</md-button>
+                </md-card-actions>
+            </md-card>
+        </div>    
+        <div flex>
+            <form name="nuevoUsuario" novalidate ng-submit="nuevoUsuario.$valid && vm.addUsuario()">
+                <md-card ng-show="vm.add">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">Nuevo Usuario</span>
+                            <md-input-container>
+                                <label>Nombre</label>
+                                <input required name="nombre" ng-model="vm.nombre" md-maxlength="75" ng-pattern="/^[a-zA-Z áéíóú´ÁÉÍÓÚ]+$/">
+                                <div ng-messages="nuevoUsuario.nombre.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">El campo solo acepta letras.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label># Empleado</label>
+                                <input required name="empleado" ng-model="vm.empleado" ng-pattern="/^[1-9]+[0-9]*$/">
+                                <div ng-messages="nuevoUsuario.empleado.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">El campo debe ser de tipo num&eacute;rico.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Correo electr&oacute;nico</label>
+                                <input required name="email" type="email" ng-model="vm.email" ng-pattern='/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i' correoexistente md-maxlength="50">
+                                <div ng-messages="nuevoUsuario.email.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">El correo electr&oacute;nico proporcionado es incorrecto, por favor ingr&eacute;selo en el siguiente formato: usuario/a@dominio Ej: ejemplo@bancamifel.com.mx</div>
+                                    <div ng-message="correoexistente">El correo ya se encuentra registrado.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Contrase&ntilde;a</label>
+                                <input required name="password" type="password" ng-model="vm.password" ng-pattern="/^.*(?=.{6,})(?=.*[A-Z])(?=.*\d).*$/">
+                                <div ng-messages="nuevoUsuario.password.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="pattern">La contrase&ntilde;a debe tener al menos 6 caracteres, de los cuales al menos uno debe ser una letra mayuscula y debe contener al menos un n&uacute;mero.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Confirmar contrase&ntilde;a</label>
+                                <input required name="confPassword" type="password" compare-to="vm.password" ng-model="vm.confPassword">
+                                <div ng-messages="nuevoUsuario.confPassword.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                    <div ng-message="compareTo">No concuerda.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Nivel</label>
+                                <md-select required name="nivel" ng-model="vm.nivel">
+                                    <md-option ng-repeat="nivel in vm.niveles" ng-value="nivel.nId">
+                                        {{nivel.descripcion}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="nuevoUsuario.sId.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container ng-show="vm.nivel != 0">
+                                <label>Zona</label>
+                                <md-select ng-required="vm.nivel != 0" name="zId" ng-model="vm.zId">
+                                    <md-option ng-repeat="zona in vm.zonas" ng-value="zona.$id">
+                                        {{zona.descripcion}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="nuevoUsuario.zId.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container ng-show="vm.nivel != 0">
+                                <label>Sucursal</label>
+                                <md-select ng-required="vm.nivel != 0" name="sId" ng-model="vm.sId">
+                                    <md-option ng-repeat="sucursal in vm.sucursales | filter: { zId: vm.zId }" ng-value="sucursal.$id">
+                                        {{sucursal.descripcion}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="nuevoUsuario.sId.$error">
+                                    <div ng-message="required">Campo obligatorio.</div>
+                                </div>
+                            </md-input-container>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="center center" layout-padding>
+                        <md-button class="md-raised md-primary" ng-disabled="!vm.online || nuevoUsuario.$invalid" type="submit">Guardar</md-button>
+                        <md-button class="md-raised md-primary" ng-click="vm.cancelarAdd()">Cancelar</md-button>
+                    </md-card-actions>
+                </md-card>
+            </form>
+        </div>
+    </md-content>
+
+</div>
+
+
+

@@ -1,0 +1,11 @@
+<div layout="column" layout-align="space-between center">
+    <md-toolbar class="md-warn">
+        <h1 class="md-toolbar-tools">Soy cliente</h1>
+    </md-toolbar>
+    <md-content layout-fill>
+        <md-button layout-fill ng-repeat-start="itemA in ml.itemsAdmin" ng-click="ml.menu(itemA.stateProvider)" class="login-button md-warn md-hue-2"> {{itemA.textoMenu}} </md-button>
+        <md-divider ng-repeat-end></md-divider>
+        <md-button layout-fill ng-repeat-start="item in ml.items" ng-click="ml.menu(item.stateProvider)" class="login-button md-warn md-hue-2"> {{item.textoMenu}}</md-button>
+        <md-divider ng-repeat-end ng-if="!$last"></md-divider>
+    </md-content>
+</div>

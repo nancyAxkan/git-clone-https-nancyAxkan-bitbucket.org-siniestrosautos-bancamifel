@@ -1,0 +1,98 @@
+.md-datepicker-input-container > .md-datepicker-input{
+    width: 160px;
+}
+.mifel_emisionVida .header_cotiza {
+    color:#FFFFFF;
+    text-align: center;
+    margin-bottom: 8px;
+}
+.mifel_emisionVida .header_cotiza .titulo {
+    background: #004681;
+    font-weight: bold;
+    line-height: 60px;
+}
+.mifel_emisionVida .header_cotiza .prima {
+    background: #004681;
+    margin-top: 1px;
+    padding: 10px 0px;
+}
+.mifel_emisionVida .header_cotiza .prima span {
+    font-weight: lighter;
+    font-style: italic;
+    display: inline-block;
+}
+.mifel_emisionVida .header_cotiza .prima div span {
+     font-style: normal;
+     font-size: 25px;
+}
+.mifel_emisionVida .header_cotiza .prima .precio {
+    font-size: 70px;
+    font-style: normal;
+    padding: 0px;
+}
+.mifel_emisionVida .header_cotiza .prima sup {
+    font-size: 25px;
+}
+.mifel_emisionVida .header_cotiza .plan {
+    font-weight: bold;
+    background: #43C2BE;
+    padding: 8px 0px;
+    font-size: 15px;
+    line-height: 20px;
+    text-transform: uppercase;
+}
+.mifel_emisionVida .md-subhead {
+    color: rgb(0,71,124);
+}
+
+.mifel_emisionVida .nota{
+    color: #ff0000;
+}
+
+.mifel_emisionVida .ahorro {
+    -webkit-transition: text-shadow 0.7s linear;
+    -moz-transition: text-shadow 0.7s linear;
+    -ms-transition: text-shadow 0.7s linear;
+    -o-transition: text-shadow 0.7s linear;
+    transition: text-shadow 0.7s linear;
+    font-size: 18px;
+}
+
+.mifel_emisionVida .ahorro.glow {
+    text-shadow: 0 0 10px #fda904;
+}
+
+.radioRequerido {
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    opacity: 1;
+    margin-top: 0;
+    color: rgb(6,204,153);
+}
+
+
+.mifel_emisionVida .hint {
+    /* Position the hint */
+    position: absolute;
+    left: 2px;
+    right: auto;
+    bottom: 7px;
+    /* Copy styles from ng-messages */
+    font-size: 12px;
+    line-height: 14px;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    /* Set our own color */
+    color: #FF5722;
+}
+.mifel_emisionVida .hint.ng-hide,
+.mifel_emisionVida .hint.ng-enter,
+.mifel_emisionVida .hint.ng-leave.ng-leave-active {
+    bottom: 26px;
+    opacity: 0;
+}
+.mifel_emisionVida .hint.ng-leave,
+.mifel_emisionVida .hint.ng-enter.ng-enter-active {
+    bottom: 7px;
+    opacity: 1; 
+}
